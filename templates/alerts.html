@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Alerts — Kill Switch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="dashboard-body">
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="/">
+          <span class="brand-shield">K</span>
+          <span>KILL SWITCH</span>
+        </a>
+        <nav class="dashboard-nav">
+          <a href="/dashboard">
+            <i>⌂</i>
+            Dashboard
+          </a>
+          <a href="/agents">
+            <i>♙</i>
+            AI Agents
+          </a>
+          <a href="/tasks">
+            <i>□</i>
+            Tasks
+          </a>
+          <a href="/wallets">
+            <i>▣</i>
+            Wallets
+          </a>
+          <a href="/transactions">
+            <i>⇄</i>
+            Transactions
+          </a>
+          <a href="/security-policies">
+            <i>⌾</i>
+            Security Policies
+          </a>
+          <a href="/monitoring">
+            <i>◌</i>
+            Monitoring
+          </a>
+          <a class="active" href="/alerts">
+            <i>♧</i>
+            Alerts
+          </a>
+          <a href="/reports">
+            <i>▤</i>
+            Reports
+          </a>
+          <a href="#">
+            <i>⚙</i>
+            Settings
+          </a>
+        </nav>
+        <div class="sidebar-bottom">
+          <span class="online-dot">
+          </span>
+          Security engine online
+        </div>
+      </aside>
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <div class="topbar-actions">
+            <button class="notification-button">
+              ♧
+              <b>
+              </b>
+            </button>
+            <div class="account-avatar">P</div>
+            <div>
+              <strong>Prajakta Patil</strong>
+              <small>Owner</small>
+            </div>
+          </div>
+        </header>
+        <section class="alerts-content">
+          <div class="alerts-title">
+            <p class="eyebrow">
+              <span>
+              </span>
+              Security centre
+            </p>
+            <h1>Alert &amp; Kill Switch</h1>
+          </div>
+          <div class="alerts-grid">
+            <section class="alerts-list">
+              <div class="alerts-heading">
+                <h2>Alerts</h2>
+                <button>Mark all as read</button>
+              </div>
+              <article class="alert-card critical">
+                <i>▲</i>
+                <div>
+                  <strong>High Spend Attempt Blocked</strong>
+                  <small>CloudBuyer AI tried to spend ₹18,500 which exceeded per-transaction limit of ₹5,000.</small>
+                </div>
+                <time>10:32 AM</time>
+              </article>
+              <article class="alert-card warning">
+                <i>▲</i>
+                <div>
+                  <strong>Policy Violation</strong>
+                  <small>Per transaction limit exceeded.</small>
+                </div>
+                <time>10:32 AM</time>
+              </article>
+              <article class="alert-card warning">
+                <i>▲</i>
+                <div>
+                  <strong>Transaction Blocked</strong>
+                  <small>Payment to AWS was blocked by policy engine.</small>
+                </div>
+                <time>10:32 AM</time>
+              </article>
+            </section>
+            <section class="kill-switch-panel">
+              <h2>Agent Control</h2>
+              <div class="controlled-agent">
+                <span>♙</span>
+                <div>
+                  <strong>CloudBuyer AI</strong>
+                  <small>
+                    Status:
+                    <b>Running</b>
+                  </small>
+                </div>
+              </div>
+              <button class="kill-switch">♟&nbsp; Activate Kill Switch</button>
+              <div class="kill-warning">
+                <strong>This will immediately:</strong>
+                <ul>
+                  <li>Freeze the agent</li>
+                  <li>Lock the wallet</li>
+                  <li>Stop all running transactions</li>
+                  <li>Block all future transactions</li>
+                </ul>
+              </div>
+              <button class="view-agent">View Agent</button>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}">
+    </script>
+  </body>
+</html>

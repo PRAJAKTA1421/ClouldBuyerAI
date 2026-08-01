@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kill Switch - Agent Wallet Controls</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="site-body">
+    <main class="landing-shell">
+      <nav class="navbar">
+        <a class="brand" href="/">
+          <span class="brand-shield">K</span>
+          <span>KILL SWITCH</span>
+        </a>
+        <div class="nav-links">
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How It Works</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#about-us">About Us</a>
+        </div>
+        <div class="nav-actions">
+          <a class="nav-register" href="/register">Register</a>
+          <a class="nav-login" href="/login">Login</a>
+        </div>
+      </nav>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">
+            <span>
+            </span>
+            Independent wallet protection
+          </p>
+          <h1>
+            Secure. Control. Protect.
+            <br>
+            <strong>AI Agents</strong>
+            with
+            <br>
+            The Kill Switch.
+          </h1>
+          <p class="hero-description">Give your AI agents the freedom to operate — and yourself the power to control, limit, and stop them at any time.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="/register">
+              Get Started
+              <span>&rarr;</span>
+            </a>
+            <a class="button secondary" href="#spend-limits">
+              Explore Features
+              <span class="play">&darr;</span>
+            </a>
+          </div>
+          <div class="trust-row">
+            <span class="live-dot">
+            </span>
+            Policy checks are enforced at the wallet layer
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="orbit orbit-one">
+          </div>
+          <div class="orbit orbit-two">
+          </div>
+          <div class="orbit orbit-three">
+          </div>
+          <div class="mini-card mini-lock">L</div>
+          <div class="mini-card mini-wallet">W</div>
+          <div class="mini-card mini-link">C</div>
+          <div class="platform">
+            <div class="platform-top">
+            </div>
+            <div class="platform-ring ring-a">
+            </div>
+            <div class="platform-ring ring-b">
+            </div>
+          </div>
+          <div class="shield">
+            <div class="shield-inner">
+              <span>&#9889;</span>
+            </div>
+          </div>
+          <span class="spark spark-a">
+          </span>
+          <span class="spark spark-b">
+          </span>
+          <span class="spark spark-c">
+          </span>
+        </div>
+      </section>
+      <div class="features-heading" id="features">
+        <p class="eyebrow">
+          <span>
+          </span>
+          Features
+        </p>
+        <h2>Complete control for every agent transaction.</h2>
+        <p>Independent controls at the wallet layer, not inside your AI agent.</p>
+      </div>
+      <section class="feature-grid">
+        <article class="feature-card">
+          <div class="icon-box">S</div>
+          <h2>Spend Limits</h2>
+          <p>Set daily and per-transaction limits.</p>
+        </article>
+        <article class="feature-card">
+          <div class="icon-box">A</div>
+          <h2>Allowlisted Counterparties</h2>
+          <p>Only pay approved parties.</p>
+        </article>
+        <article class="feature-card">
+          <div class="icon-box">M</div>
+          <h2>Real-time Monitoring</h2>
+          <p>Track every transaction in real time.</p>
+        </article>
+        <article class="feature-card danger">
+          <div class="icon-box">K</div>
+          <h2>Kill Switch</h2>
+          <p>Freeze an agent anytime, instantly.</p>
+        </article>
+      </section>
+      <section class="feature-detail" id="spend-limits">
+        <div>
+          <p class="eyebrow">
+            <span>
+            </span>
+            Policy 01
+          </p>
+          <h2>Spend limits that an agent cannot override.</h2>
+          <p>Set a daily budget and a maximum value per transaction. Every payment is checked before it leaves the wallet, even when your agent is operating unsupervised.</p>
+          <ul>
+            <li>Daily and per-transaction caps</li>
+            <li>Wallet-layer enforcement</li>
+            <li>Live usage meter</li>
+          </ul>
+        </div>
+        <div class="detail-visual spend-visual">
+          <span class="visual-label">Daily agent budget</span>
+          <strong>
+            $680
+            <small>/ $1,000</small>
+          </strong>
+          <div class="progress">
+            <i>
+            </i>
+          </div>
+          <p>32% budget remaining</p>
+        </div>
+      </section>
+      <section class="feature-detail reverse">
+        <div>
+          <p class="eyebrow">
+            <span>
+            </span>
+            Policy 02
+          </p>
+          <h2>Pay only counterparties you trust.</h2>
+          <p>Build an allowlist of approved wallets and services. Unknown destinations are blocked automatically, before funds can leave the protected wallet.</p>
+          <ul>
+            <li>Approved wallet address list</li>
+            <li>Instant block for unknown recipients</li>
+            <li>Clear audit trail for every decision</li>
+          </ul>
+        </div>
+        <div class="detail-visual allow-visual">
+          <span class="visual-label">Approved counterparties</span>
+          <div class="recipient">
+            <b>OK</b>
+            <span>CloudCompute</span>
+            <em>Allowed</em>
+          </div>
+          <div class="recipient">
+            <b>OK</b>
+            <span>DataStore</span>
+            <em>Allowed</em>
+          </div>
+          <div class="recipient blocked">
+            <b>X</b>
+            <span>Unknown wallet</span>
+            <em>Blocked</em>
+          </div>
+        </div>
+      </section>
+      <section class="feature-detail">
+        <div>
+          <p class="eyebrow">
+            <span>
+            </span>
+            Policy 03
+          </p>
+          <h2>Know what your agent is doing, in real time.</h2>
+          <p>See every transaction attempt as it happens. The activity stream tells you which policy approved or blocked the action and why.</p>
+          <ul>
+            <li>Transaction activity stream</li>
+            <li>Policy decision history</li>
+            <li>Suspicious activity alerts</li>
+          </ul>
+        </div>
+        <div class="detail-visual monitor-visual">
+          <span class="visual-label">Live activity</span>
+          <div>
+            <b class="green-dot">
+            </b>
+            Payment to CloudCompute
+            <em>Approved</em>
+          </div>
+          <div>
+            <b class="red-dot">
+            </b>
+            Payment to Unknown wallet
+            <em>Blocked</em>
+          </div>
+          <div>
+            <b class="purple-dot">
+            </b>
+            Daily limit updated
+            <em>Now</em>
+          </div>
+        </div>
+      </section>
+      <section class="feature-detail reverse kill-detail">
+        <div>
+          <p class="eyebrow">
+            <span>
+            </span>
+            Emergency control
+          </p>
+          <h2>One switch. Immediate protection.</h2>
+          <p>When something looks wrong, freeze the agent wallet from the owner dashboard. Pending and future transfers stop immediately until you reactivate it.</p>
+          <ul>
+            <li>Owner-only emergency control</li>
+            <li>Stops pending and future transfers</li>
+            <li>Instant owner notification</li>
+          </ul>
+          <a class="button primary" href="/register">
+            Protect your agent
+            <span>&rarr;</span>
+          </a>
+        </div>
+        <div class="detail-visual kill-visual">
+          <span class="visual-label">Agent wallet status</span>
+          <div class="status-orb">K</div>
+          <strong>Emergency Freeze</strong>
+          <button type="button">Activate Kill Switch</button>
+        </div>
+      </section>
+      <section class="how-it-works" id="how-it-works">
+        <p class="eyebrow">
+          <span>
+          </span>
+          How it works
+        </p>
+        <h2>Protection stays active while your agent works.</h2>
+        <div class="workflow-steps">
+          <article>
+            <b>01</b>
+            <h3>Connect wallet</h3>
+            <p>Add the controlled wallet used by your AI agent.</p>
+          </article>
+          <article>
+            <b>02</b>
+            <h3>Set policies</h3>
+            <p>Choose limits, allowlisted recipients, and alerts.</p>
+          </article>
+          <article>
+            <b>03</b>
+            <h3>Run safely</h3>
+            <p>Every transaction is checked before it is sent.</p>
+          </article>
+          <article>
+            <b>04</b>
+            <h3>Freeze instantly</h3>
+            <p>Use the Kill Switch whenever activity looks unsafe.</p>
+          </article>
+        </div>
+      </section>
+      <section class="pricing-section" id="pricing">
+        <div>
+          <p class="eyebrow">
+            <span>
+            </span>
+            Pricing
+          </p>
+          <h2>Start protected. Scale with confidence.</h2>
+          <p>Begin with a simple policy setup and upgrade when your agents need more wallets, limits, and monitoring.</p>
+        </div>
+        <div class="price-card">
+          <span>Starter</span>
+          <strong>
+            $0
+            <small>/ month</small>
+          </strong>
+          <p>For one protected AI agent.</p>
+          <ul>
+            <li>1 controlled wallet</li>
+            <li>Spend limits</li>
+            <li>Allowlisted counterparties</li>
+          </ul>
+          <a class="button primary" href="/register">
+            Get started
+            <span>&rarr;</span>
+          </a>
+        </div>
+      </section>
+      <section class="about-section" id="about-us">
+        <p class="eyebrow">
+          <span>
+          </span>
+          About us
+        </p>
+        <h2>Autonomy should never mean losing control.</h2>
+        <p>Kill Switch gives builders an independent control layer for autonomous-agent wallets, so safeguards do not depend on the agent behaving correctly.</p>
+      </section>
+    </main>
+    <script src="{{ url_for('static', filename='script.js') }}">
+    </script>
+  </body>
+</html>

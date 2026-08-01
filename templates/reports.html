@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Reports — Kill Switch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="dashboard-body">
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="/">
+          <span class="brand-shield">K</span>
+          <span>KILL SWITCH</span>
+        </a>
+        <nav class="dashboard-nav">
+          <a href="/dashboard">
+            <i>⌂</i>
+            Dashboard
+          </a>
+          <a href="/agents">
+            <i>♙</i>
+            AI Agents
+          </a>
+          <a href="/tasks">
+            <i>□</i>
+            Tasks
+          </a>
+          <a href="/wallets">
+            <i>▣</i>
+            Wallets
+          </a>
+          <a href="/transactions">
+            <i>⇄</i>
+            Transactions
+          </a>
+          <a href="/security-policies">
+            <i>⌾</i>
+            Security Policies
+          </a>
+          <a href="/monitoring">
+            <i>◌</i>
+            Monitoring
+          </a>
+          <a href="/alerts">
+            <i>♧</i>
+            Alerts
+          </a>
+          <a class="active" href="/reports">
+            <i>▤</i>
+            Reports
+          </a>
+          <a href="#">
+            <i>⚙</i>
+            Settings
+          </a>
+        </nav>
+        <div class="sidebar-bottom">
+          <span class="online-dot">
+          </span>
+          Security engine online
+        </div>
+      </aside>
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <div class="topbar-actions">
+            <button class="notification-button">
+              ♧
+              <b>
+              </b>
+            </button>
+            <div class="account-avatar">P</div>
+            <div>
+              <strong>Prajakta Patil</strong>
+              <small>Owner</small>
+            </div>
+          </div>
+        </header>
+        <section class="reports-content">
+          <div class="reports-title">
+            <p class="eyebrow">
+              <span>
+              </span>
+              Reports &amp; analytics
+            </p>
+            <h1>Reports &amp; Analytics</h1>
+          </div>
+          <div class="report-filters">
+            <label>
+              Select Agent
+              <select>
+                <option>CloudBuyer AI</option>
+              </select>
+            </label>
+            <label>
+              Date Range
+              <input value="01 May 2025 – 29 May 2025">
+            </label>
+            <label>
+              Export
+              <select>
+                <option>PDF</option>
+                <option>CSV</option>
+              </select>
+            </label>
+          </div>
+          <div class="report-stats">
+            <article>
+              <span>Total Transactions</span>
+              <strong>24</strong>
+            </article>
+            <article class="report-green">
+              <span>Successful</span>
+              <strong>16</strong>
+            </article>
+            <article class="report-red">
+              <span>Blocked</span>
+              <strong>8</strong>
+            </article>
+            <article>
+              <span>Total Spend</span>
+              <strong>₹56,930.50</strong>
+            </article>
+          </div>
+          <div class="report-charts">
+            <article>
+              <h2>Spending Trend</h2>
+              <div class="trend-chart">
+                <span>₹40K</span>
+                <span>₹30K</span>
+                <span>₹20K</span>
+                <span>₹10K</span>
+                <svg viewBox="0 0 440 175">
+                  <path d="M15 153L75 119 108 127 150 98 195 106 244 66 286 82 333 34 375 45 422 8"/>
+                </svg>
+                <div class="chart-dates">
+                  <b>01 May</b>
+                  <b>08 May</b>
+                  <b>15 May</b>
+                  <b>22 May</b>
+                  <b>29 May</b>
+                </div>
+              </div>
+            </article>
+            <article>
+              <h2>Spend by Category</h2>
+              <div class="category-chart">
+                <div class="donut">
+                </div>
+                <ul>
+                  <li>
+                    <i class="blue">
+                    </i>
+                    Compute (45%)
+                  </li>
+                  <li>
+                    <i class="red">
+                    </i>
+                    Storage (25%)
+                  </li>
+                  <li>
+                    <i class="yellow">
+                    </i>
+                    API (20%)
+                  </li>
+                  <li>
+                    <i class="purple">
+                    </i>
+                    Database (10%)
+                  </li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}">
+    </script>
+  </body>
+</html>

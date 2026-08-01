@@ -1,0 +1,11 @@
+# Python virtual environment and cache
+.venv/
+__pycache__/
+*.py[cod]
+
+# Flask local files
+instance/
+.env
+
+# Editor files
+.vscode/

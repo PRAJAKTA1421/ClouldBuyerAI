@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Security Policies — Kill Switch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="dashboard-body">
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="/">
+          <span class="brand-shield">K</span>
+          <span>KILL SWITCH</span>
+        </a>
+        <nav class="dashboard-nav">
+          <a href="/dashboard">
+            <i>⌂</i>
+            Dashboard
+          </a>
+          <a href="/agents">
+            <i>♙</i>
+            AI Agents
+          </a>
+          <a href="/tasks">
+            <i>□</i>
+            Tasks
+          </a>
+          <a href="/wallets">
+            <i>▣</i>
+            Wallets
+          </a>
+          <a href="/transactions">
+            <i>⇄</i>
+            Transactions
+          </a>
+          <a class="active" href="/security-policies">
+            <i>⌾</i>
+            Security Policies
+          </a>
+          <a href="#">
+            <i>◌</i>
+            Monitoring
+          </a>
+          <a href="#">
+            <i>♧</i>
+            Alerts
+          </a>
+          <a href="#">
+            <i>▤</i>
+            Reports
+          </a>
+          <a href="#">
+            <i>⚙</i>
+            Settings
+          </a>
+        </nav>
+        <div class="sidebar-bottom">
+          <span class="online-dot">
+          </span>
+          Security engine online
+        </div>
+      </aside>
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <button class="menu-button" type="button" aria-label="Toggle menu">☰</button>
+          <div class="topbar-actions">
+            <button class="notification-button" type="button" aria-label="Notifications">
+              ♧
+              <b>
+              </b>
+            </button>
+            <div class="account-avatar">P</div>
+            <div>
+              <strong>Prajakta Patil</strong>
+              <small>Owner</small>
+            </div>
+          </div>
+        </header>
+        <section class="policy-content">
+          <div class="policy-title">
+            <p class="eyebrow">
+              <span>
+              </span>
+              Agent safeguards
+            </p>
+            <h1>Set Security Policies</h1>
+            <p>Define rules and limits for your agent.</p>
+          </div>
+          <form class="security-policy-form">
+            <section class="policy-form-card">
+              <h2>Spend Limits</h2>
+              <label>
+                Daily Spend Limit
+                <input type="text" value="₹ 20,000">
+                <small>Maximum total amount agent can spend per day</small>
+              </label>
+              <label>
+                Per Transaction Limit
+                <input type="text" value="₹ 5,000">
+                <small>Maximum amount per single transaction</small>
+              </label>
+              <label>
+                Monthly Spend Limit
+                <input type="text" value="₹ 5,00,000">
+                <small>Maximum total amount agent can spend per month</small>
+              </label>
+            </section>
+            <section class="policy-form-card counterparties-card">
+              <h2>Allowlisted Counterparties</h2>
+              <p>Add approved wallets / vendors</p>
+              <div class="counterparty">
+                <span class="counterparty-logo aws-mark">aws</span>
+                <span>
+                  <strong>AWS (India)</strong>
+                  <small>0xA12...9f8b</small>
+                </span>
+                <b>›</b>
+              </div>
+              <div class="counterparty">
+                <span class="counterparty-logo google-mark">G</span>
+                <span>
+                  <strong>Google Cloud</strong>
+                  <small>0xB45...cd12</small>
+                </span>
+                <b>›</b>
+              </div>
+              <div class="counterparty">
+                <span class="counterparty-logo azure-mark">A</span>
+                <span>
+                  <strong>Azure</strong>
+                  <small>0xC78...ef34</small>
+                </span>
+                <b>›</b>
+              </div>
+              <button class="add-counterparty" type="button">＋ Add New</button>
+            </section>
+            <div class="policy-actions">
+              <a href="/dashboard">Back</a>
+              <button type="submit">Save &amp; Continue</button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}">
+    </script>
+  </body>
+</html>

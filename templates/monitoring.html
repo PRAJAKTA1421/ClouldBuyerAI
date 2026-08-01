@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Monitoring — Kill Switch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="dashboard-body">
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="/">
+          <span class="brand-shield">K</span>
+          <span>KILL SWITCH</span>
+        </a>
+        <nav class="dashboard-nav">
+          <a href="/dashboard">
+            <i>⌂</i>
+            Dashboard
+          </a>
+          <a href="/agents">
+            <i>♙</i>
+            AI Agents
+          </a>
+          <a href="/tasks">
+            <i>□</i>
+            Tasks
+          </a>
+          <a href="/wallets">
+            <i>▣</i>
+            Wallets
+          </a>
+          <a href="/transactions">
+            <i>⇄</i>
+            Transactions
+          </a>
+          <a href="/security-policies">
+            <i>⌾</i>
+            Security Policies
+          </a>
+          <a class="active" href="/monitoring">
+            <i>◌</i>
+            Monitoring
+          </a>
+          <a href="#">
+            <i>♧</i>
+            Alerts
+          </a>
+          <a href="#">
+            <i>▤</i>
+            Reports
+          </a>
+          <a href="#">
+            <i>⚙</i>
+            Settings
+          </a>
+        </nav>
+        <div class="sidebar-bottom">
+          <span class="online-dot">
+          </span>
+          Security engine online
+        </div>
+      </aside>
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <button class="menu-button" type="button">☰</button>
+          <div class="topbar-actions">
+            <button class="notification-button" type="button">
+              ♧
+              <b>
+              </b>
+            </button>
+            <div class="account-avatar">P</div>
+            <div>
+              <strong>Prajakta Patil</strong>
+              <small>Owner</small>
+            </div>
+          </div>
+        </header>
+        <section class="monitoring-content">
+          <div class="monitor-agent">
+            <div class="monitor-agent-icon">✦</div>
+            <h1>CloudBuyer AI</h1>
+            <span>Running</span>
+            <button>Stop Agent</button>
+          </div>
+          <div class="monitor-tabs">
+            <button>Overview</button>
+            <button class="active">Live Transactions</button>
+            <button>Logs</button>
+          </div>
+          <section class="monitor-table">
+            <div class="monitor-row monitor-head">
+              <span>Time</span>
+              <span>Activity</span>
+              <span>Amount</span>
+              <span>Status</span>
+            </div>
+            <div class="monitor-row">
+              <span>10:31:22</span>
+              <strong>Searching AWS EC2 instances</strong>
+              <span>—</span>
+              <em class="progress">In Progress</em>
+            </div>
+            <div class="monitor-row">
+              <span>10:31:45</span>
+              <strong>Found best GPU instance</strong>
+              <span>—</span>
+              <em class="success">Success</em>
+            </div>
+            <div class="monitor-row">
+              <span>10:32:05</span>
+              <strong>Requesting payment to AWS</strong>
+              <span>₹18,500.00</span>
+              <em class="pending">Pending Review</em>
+            </div>
+            <div class="monitor-row">
+              <span>10:32:07</span>
+              <strong>Policy check in progress</strong>
+              <span>—</span>
+              <em class="progress">In Progress</em>
+            </div>
+          </section>
+          <section class="monitor-stats">
+            <article>
+              <span>Spent Today</span>
+              <strong>₹12,340.00</strong>
+            </article>
+            <article>
+              <span>Remaining Today</span>
+              <strong>₹7,660.00</strong>
+            </article>
+            <article>
+              <span>Transactions</span>
+              <strong>7</strong>
+            </article>
+            <article>
+              <span>Risk Score</span>
+              <strong class="safe">28 (Low)</strong>
+            </article>
+          </section>
+        </section>
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}">
+    </script>
+  </body>
+</html>

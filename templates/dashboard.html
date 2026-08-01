@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard — Kill Switch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="dashboard-body">
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="/">
+          <span class="brand-shield">K</span>
+          <span>KILL SWITCH</span>
+        </a>
+        <nav class="dashboard-nav" aria-label="Dashboard navigation">
+          <a class="active" href="/dashboard">
+            <i>⌂</i>
+            Dashboard
+          </a>
+          <a href="/agents">
+            <i>♙</i>
+            AI Agents
+          </a>
+          <a href="/tasks">
+            <i>□</i>
+            Tasks
+          </a>
+          <a href="/wallets">
+            <i>▣</i>
+            Wallets
+          </a>
+          <a href="/transactions">
+            <i>⇄</i>
+            Transactions
+          </a>
+          <a href="/security-policies">
+            <i>⌾</i>
+            Security Policies
+          </a>
+          <a href="#">
+            <i>◌</i>
+            Monitoring
+          </a>
+          <a href="#">
+            <i>♧</i>
+            Alerts
+          </a>
+          <a href="#">
+            <i>▤</i>
+            Reports
+          </a>
+          <a href="#">
+            <i>⚙</i>
+            Settings
+          </a>
+        </nav>
+        <div class="sidebar-bottom">
+          <span class="online-dot">
+          </span>
+          Security engine online
+        </div>
+      </aside>
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <button class="menu-button" type="button" aria-label="Toggle menu">☰</button>
+          <div class="topbar-actions">
+            <button class="notification-button" type="button" aria-label="Notifications">
+              ♧
+              <b>
+              </b>
+            </button>
+            <div class="account-avatar">P</div>
+            <div>
+              <strong>Prajakta Patil</strong>
+              <small>Owner</small>
+            </div>
+          </div>
+        </header>
+        <section class="dashboard-content">
+          <div class="dashboard-title">
+            <div>
+              <p class="eyebrow">
+                <span>
+                </span>
+                Live control centre
+              </p>
+              <h1>Dashboard</h1>
+            </div>
+            <p>Last updated just now</p>
+          </div>
+          <div class="stat-grid">
+            <article class="stat-card purple">
+              <span>Total Agents</span>
+              <strong>3</strong>
+              <i>♙</i>
+              <small>1 awaiting review</small>
+            </article>
+            <article class="stat-card green">
+              <span>Active Agents</span>
+              <strong>2</strong>
+              <i>♙</i>
+              <small>All policies active</small>
+            </article>
+            <article class="stat-card blue">
+              <span>Wallet Balance</span>
+              <strong>₹75,430.50</strong>
+              <i>▣</i>
+              <small>Across 3 wallets</small>
+            </article>
+            <article class="stat-card red">
+              <span>Today's Spend</span>
+              <strong>₹12,340.00</strong>
+              <i>▣</i>
+              <small>of ₹25,000 daily limit</small>
+            </article>
+          </div>
+          <div class="dashboard-grid">
+            <article class="dashboard-panel spending-panel">
+              <div class="panel-heading">
+                <div>
+                  <h2>
+                    Spending Overview
+                    <small>(This Week)</small>
+                  </h2>
+                  <p>Agent wallet activity</p>
+                </div>
+                <button type="button">This week⌄</button>
+              </div>
+              <div class="chart-wrap">
+                <div class="chart-y">
+                  <span>₹40K</span>
+                  <span>₹30K</span>
+                  <span>₹20K</span>
+                  <span>₹10K</span>
+                  <span>0</span>
+                </div>
+                <svg class="spend-chart" viewBox="0 0 500 230" role="img" aria-label="Weekly spending chart">
+                  <defs>
+                    <linearGradient id="area" x1="0" x2="0" y1="0" y2="1">
+                      <stop offset="0" stop-color="#a567ff" stop-opacity=".35"/>
+                      <stop offset="1" stop-color="#a567ff" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <path class="chart-grid" d="M0 35H500M0 82H500M0 129H500M0 176H500M0 222H500"/>
+                  <path fill="url(#area)" d="M12 217L83 151L154 111L225 137L296 80L367 44L438 39L488 5V222H12Z"/>
+                  <path class="chart-line" d="M12 217L83 151L154 111L225 137L296 80L367 44L438 39L488 5"/>
+                  <g class="chart-points">
+                    <circle cx="12" cy="217" r="5"/>
+                    <circle cx="83" cy="151" r="5"/>
+                    <circle cx="154" cy="111" r="5"/>
+                    <circle cx="225" cy="137" r="5"/>
+                    <circle cx="296" cy="80" r="5"/>
+                    <circle cx="367" cy="44" r="5"/>
+                    <circle cx="438" cy="39" r="5"/>
+                    <circle cx="488" cy="5" r="5"/>
+                  </g>
+                </svg>
+              </div>
+              <div class="chart-x">
+                <span>Mon</span>
+                <span>Tue</span>
+                <span>Wed</span>
+                <span>Thu</span>
+                <span>Fri</span>
+                <span>Sat</span>
+                <span>Sun</span>
+              </div>
+            </article>
+            <article class="dashboard-panel risk-panel">
+              <div class="panel-heading">
+                <div>
+                  <h2>
+                    Risk Score
+                    <small>(All Agents)</small>
+                  </h2>
+                  <p>Wallet safety signal</p>
+                </div>
+              </div>
+              <div class="risk-gauge">
+                <svg viewBox="0 0 210 210">
+                  <circle class="gauge-track" cx="105" cy="105" r="78"/>
+                  <circle class="gauge-value" cx="105" cy="105" r="78"/>
+                </svg>
+                <div>
+                  <strong>28</strong>
+                  <span>Low Risk</span>
+                </div>
+              </div>
+              <div class="risk-footer">
+                <span class="online-dot">
+                </span>
+                All systems protected
+              </div>
+            </article>
+            <article class="dashboard-panel alerts-panel">
+              <div class="panel-heading">
+                <div>
+                  <h2>Recent Alerts</h2>
+                  <p>Requires your attention</p>
+                </div>
+              </div>
+              <div class="alert-item critical">
+                <b>!</b>
+                <div>
+                  <strong>High spend attempt blocked</strong>
+                  <span>Cloudlayer AI · 10:23 AM</span>
+                </div>
+              </div>
+              <div class="alert-item warning">
+                <b>!</b>
+                <div>
+                  <strong>Unknown wallet detected</strong>
+                  <span>DataMiner AI · 09:15 AM</span>
+                </div>
+              </div>
+              <div class="alert-item warning">
+                <b>!</b>
+                <div>
+                  <strong>Agent frozen by owner</strong>
+                  <span>ResearchBot · Yesterday</span>
+                </div>
+              </div>
+              <a class="view-alerts" href="#">View All Alerts →</a>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}">
+    </script>
+  </body>
+</html>

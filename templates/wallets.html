@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wallets — Kill Switch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="dashboard-body">
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="/">
+          <span class="brand-shield">K</span>
+          <span>KILL SWITCH</span>
+        </a>
+        <nav class="dashboard-nav">
+          <a href="/dashboard">
+            <i>⌂</i>
+            Dashboard
+          </a>
+          <a href="/agents">
+            <i>♙</i>
+            AI Agents
+          </a>
+          <a href="/tasks">
+            <i>□</i>
+            Tasks
+          </a>
+          <a class="active" href="/wallets">
+            <i>▣</i>
+            Wallets
+          </a>
+          <a href="#">
+            <i>⇄</i>
+            Transactions
+          </a>
+          <a href="#">
+            <i>⌾</i>
+            Security Policies
+          </a>
+          <a href="#">
+            <i>◌</i>
+            Monitoring
+          </a>
+          <a href="#">
+            <i>♧</i>
+            Alerts
+          </a>
+          <a href="#">
+            <i>▤</i>
+            Reports
+          </a>
+          <a href="#">
+            <i>⚙</i>
+            Settings
+          </a>
+        </nav>
+        <div class="sidebar-bottom">
+          <span class="online-dot">
+          </span>
+          Security engine online
+        </div>
+      </aside>
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <button class="menu-button" type="button">☰</button>
+          <div class="topbar-actions">
+            <button class="notification-button" type="button">
+              ♧
+              <b>
+              </b>
+            </button>
+            <div class="account-avatar">P</div>
+            <div>
+              <strong>Prajakta Patil</strong>
+              <small>Owner</small>
+            </div>
+          </div>
+        </header>
+        <section class="wallet-content">
+          <div class="wallet-title">
+            <p class="eyebrow">
+              <span>
+              </span>
+              Wallet controls
+            </p>
+            <h1>Connect Wallet</h1>
+            <p>Choose a wallet to connect with your protected AI agent.</p>
+          </div>
+          <div class="wallet-layout">
+            <section class="wallet-options">
+              <div class="wallet-tabs">
+                <button class="active">Recommended</button>
+                <button>Web3 Wallets</button>
+                <button>Virtual Wallet</button>
+              </div>
+              <div class="wallet-row">
+                <span class="wallet-logo fox">M</span>
+                <strong>MetaMask</strong>
+                <button data-wallet-connect="MetaMask">Connect</button>
+              </div>
+              <div class="wallet-row">
+                <span class="wallet-logo wc">W</span>
+                <strong>WalletConnect</strong>
+                <button data-wallet-connect="WalletConnect">Connect</button>
+              </div>
+              <div class="wallet-row">
+                <span class="wallet-logo cb">C</span>
+                <strong>Coinbase Wallet</strong>
+                <button data-wallet-connect="Coinbase Wallet">Connect</button>
+              </div>
+              <div class="wallet-row">
+                <span class="wallet-logo ks">K</span>
+                <strong>KillSwitch Virtual Wallet</strong>
+                <button data-wallet-connect="KillSwitch Virtual Wallet">Create New</button>
+              </div>
+            </section>
+            <aside class="wallet-summary">
+              <h2>Wallet Summary</h2>
+              <div>
+                <span>Address</span>
+                <strong data-wallet-address>Not connected</strong>
+              </div>
+              <div>
+                <span>Balance</span>
+                <strong data-wallet-balance>₹0.00</strong>
+              </div>
+              <div>
+                <span>Network</span>
+                <strong data-wallet-network>—</strong>
+              </div>
+              <p data-wallet-status>Not connected</p>
+            </aside>
+          </div>
+          <section class="wallet-categories">
+            <article>
+              <h2>▣ UPI Wallets</h2>
+              <div>
+                🟢 Google Pay
+                <button data-wallet-connect="Google Pay">Connect</button>
+              </div>
+              <div>
+                🟣 PhonePe
+                <button data-wallet-connect="PhonePe">Connect</button>
+              </div>
+              <div>
+                🔵 Paytm
+                <button data-wallet-connect="Paytm">Connect</button>
+              </div>
+              <div>
+                🟠 Amazon Pay
+                <button data-wallet-connect="Amazon Pay">Connect</button>
+              </div>
+            </article>
+            <article>
+              <h2>♜ Bank Accounts</h2>
+              <div>
+                SBI
+                <button data-wallet-connect="SBI">Connect</button>
+              </div>
+              <div>
+                HDFC Bank
+                <button data-wallet-connect="HDFC Bank">Connect</button>
+              </div>
+              <div>
+                ICICI Bank
+                <button data-wallet-connect="ICICI Bank">Connect</button>
+              </div>
+              <div>
+                Axis Bank
+                <button data-wallet-connect="Axis Bank">Connect</button>
+              </div>
+            </article>
+            <article>
+              <h2>▣ Business Wallets</h2>
+              <div>
+                RazorpayX Wallet
+                <button data-wallet-connect="RazorpayX Wallet">Connect</button>
+              </div>
+              <div>
+                Stripe Treasury
+                <button data-wallet-connect="Stripe Treasury">Connect</button>
+              </div>
+              <div>
+                PayPal Business
+                <button data-wallet-connect="PayPal Business">Connect</button>
+              </div>
+            </article>
+            <article>
+              <h2>◉ Blockchain Wallets</h2>
+              <div>
+                🦊 MetaMask
+                <button data-wallet-connect="MetaMask">Connect</button>
+              </div>
+              <div>
+                Coinbase Wallet
+                <button data-wallet-connect="Coinbase Wallet">Connect</button>
+              </div>
+              <div>
+                🔷 WalletConnect
+                <button data-wallet-connect="WalletConnect">Connect</button>
+              </div>
+              <div>
+                ♡ KillSwitch Wallet
+                <button data-wallet-connect="KillSwitch Virtual Wallet">Create</button>
+              </div>
+            </article>
+          </section>
+          <p class="wallet-security">⌾ Your private keys are never stored. All connections are secure.</p>
+        </section>
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}">
+    </script>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tasks — Kill Switch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="dashboard-body">
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="/">
+          <span class="brand-shield">K</span>
+          <span>KILL SWITCH</span>
+        </a>
+        <nav class="dashboard-nav">
+          <a href="/dashboard">
+            <i>⌂</i>
+            Dashboard
+          </a>
+          <a href="/agents">
+            <i>♙</i>
+            AI Agents
+          </a>
+          <a class="active" href="/tasks">
+            <i>□</i>
+            Tasks
+          </a>
+          <a href="#">
+            <i>▣</i>
+            Wallets
+          </a>
+          <a href="#">
+            <i>⇄</i>
+            Transactions
+          </a>
+          <a href="#">
+            <i>⌾</i>
+            Security Policies
+          </a>
+          <a href="#">
+            <i>◌</i>
+            Monitoring
+          </a>
+          <a href="#">
+            <i>♧</i>
+            Alerts
+          </a>
+          <a href="#">
+            <i>▤</i>
+            Reports
+          </a>
+          <a href="#">
+            <i>⚙</i>
+            Settings
+          </a>
+        </nav>
+        <div class="sidebar-bottom">
+          <span class="online-dot">
+          </span>
+          Security engine online
+        </div>
+      </aside>
+      <main class="dashboard-main">
+        <header class="dashboard-topbar">
+          <button class="menu-button" type="button">☰</button>
+          <div class="topbar-actions">
+            <button class="notification-button" type="button">
+              ♧
+              <b>
+              </b>
+            </button>
+            <div class="account-avatar">P</div>
+            <div>
+              <strong>Prajakta Patil</strong>
+              <small>Owner</small>
+            </div>
+          </div>
+        </header>
+        <section class="task-list-content">
+          <div class="task-page-title">
+            <div>
+              <p class="eyebrow">
+                <span>
+                </span>
+                Task management
+              </p>
+              <h1>Assign a task</h1>
+              <p>Select one of your AI agents and give it a protected mission.</p>
+            </div>
+            <a href="/agents" class="new-agent-link">+ Create AI Agent</a>
+          </div>
+          <div class="agent-task-grid" data-agent-task-grid>
+          </div>
+          <div class="empty-agents" data-empty-agents>
+            <span>✦</span>
+            <h2>No AI agents yet</h2>
+            <p>Create an AI agent first, then you can assign it secure tasks.</p>
+            <a class="button primary" href="/agents">
+              Create AI Agent
+              <span>→</span>
+            </a>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}">
+    </script>
+  </body>
+</html>

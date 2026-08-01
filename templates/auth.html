@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ 'Register' if mode == 'register' else 'Login' }} — Kill Switch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="site-body auth-body">
+    <main class="auth-shell">
+      <a class="auth-brand brand" href="/">
+        <span class="brand-shield">ϟ</span>
+        <span>KILL SWITCH</span>
+      </a>
+      <section class="auth-card">
+        <div class="auth-form-side">
+          <div class="auth-heading">
+            <p class="eyebrow">
+              <span>
+              </span>
+              Secure access
+            </p>
+            <h1>{{ 'Create your account' if mode == 'register' else 'Welcome Back!' }}</h1>
+            <p>{{ 'Set up your protected agent workspace.' if mode == 'register' else 'Login to your account' }}</p>
+          </div>
+          <div class="auth-tabs">
+            <a href="/login" class="{{ 'active' if mode == 'login' else '' }}">Login</a>
+            <a href="/register" class="{{ 'active' if mode == 'register' else '' }}">Register</a>
+          </div>
+          {% if mode == 'login' %}
+          <form class="form-grid" data-demo-form>
+            <label>
+              Email
+              <input type="email" placeholder="Enter your email" required>
+            </label>
+            <label>
+              Password
+              <div class="password-wrap">
+                <input type="password" placeholder="Enter your password" required>
+                <button type="button" class="toggle-password">◌</button>
+              </div>
+            </label>
+            <div class="form-options">
+              <label class="remember">
+                <input type="checkbox" checked>
+                Remember me
+              </label>
+              <a href="#">Forgot Password?</a>
+            </div>
+            <button class="form-submit" type="submit">Login</button>
+            <p class="or-divider">or continue with</p>
+            <div class="social-buttons">
+              <button class="google-button" type="button">
+                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#4285F4" d="M21.8 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.5a4.7 4.7 0 0 1-2 3.1v2.5h3.2c1.9-1.8 3.1-4.4 3.1-7.4Z"/>
+                  <path fill="#34A853" d="M12 22c2.7 0 5-.9 6.7-2.4l-3.2-2.5c-.9.6-2 .9-3.5.9-2.7 0-5-1.8-5.8-4.3H2.9v2.6A10 10 0 0 0 12 22Z"/>
+                  <path fill="#FBBC05" d="M6.2 13.7a6 6 0 0 1 0-3.5V7.6H2.9a10 10 0 0 0 0 8.8l3.3-2.7Z"/>
+                  <path fill="#EA4335" d="M12 6c1.6 0 3.1.6 4.2 1.7l3.1-3.1A10 10 0 0 0 2.9 7.6l3.3 2.6C7 7.8 9.3 6 12 6Z"/>
+                </svg>
+                Google
+              </button>
+              <button class="github-button" type="button">
+                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="currentColor" d="M12 2.5a9.5 9.5 0 0 0-3 18.5c.5.1.6-.2.6-.4v-1.8c-2.5.5-3-1.1-3-1.1-.4-1-.9-1.3-.9-1.3-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.3.7.1-.5.3-.9.5-1.1-2-.2-4.1-1-4.1-4.4 0-1 .3-1.8.8-2.4-.1-.2-.4-1.1.1-2.4 0 0 .8-.3 2.5.9A8.8 8.8 0 0 1 12 6c.8 0 1.5.1 2.3.3 1.7-1.2 2.5-.9 2.5-.9.5 1.3.2 2.2.1 2.4.5.6.8 1.4.8 2.4 0 3.4-2.1 4.2-4.1 4.4.3.3.6.8.6 1.6v2.4c0 .2.2.5.6.4A9.5 9.5 0 0 0 12 2.5Z"/>
+                </svg>
+                GitHub
+              </button>
+            </div>
+          </form>
+          {% else %}
+          <form class="form-grid" data-demo-form>
+            <label>
+              Username
+              <input type="text" name="username" placeholder="Choose a username" required>
+            </label>
+            <label>
+              Work email
+              <input type="email" placeholder="Enter your email" required>
+            </label>
+            <label>
+              Password
+              <div class="password-wrap">
+                <input type="password" placeholder="Create a password" required>
+                <button type="button" class="toggle-password">◌</button>
+              </div>
+            </label>
+            <label class="remember">
+              <input type="checkbox" required>
+              I agree to the Terms and Privacy Policy
+            </label>
+            <button class="form-submit" type="submit">Create account</button>
+            <p class="or-divider">or continue with</p>
+            <div class="social-buttons">
+              <button class="google-button" type="button">
+                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#4285F4" d="M21.8 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.5a4.7 4.7 0 0 1-2 3.1v2.5h3.2c1.9-1.8 3.1-4.4 3.1-7.4Z"/>
+                  <path fill="#34A853" d="M12 22c2.7 0 5-.9 6.7-2.4l-3.2-2.5c-.9.6-2 .9-3.5.9-2.7 0-5-1.8-5.8-4.3H2.9v2.6A10 10 0 0 0 12 22Z"/>
+                  <path fill="#FBBC05" d="M6.2 13.7a6 6 0 0 1 0-3.5V7.6H2.9a10 10 0 0 0 0 8.8l3.3-2.7Z"/>
+                  <path fill="#EA4335" d="M12 6c1.6 0 3.1.6 4.2 1.7l3.1-3.1A10 10 0 0 0 2.9 7.6l3.3 2.6C7 7.8 9.3 6 12 6Z"/>
+                </svg>
+                Google
+              </button>
+              <button class="github-button" type="button">
+                <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="currentColor" d="M12 2.5a9.5 9.5 0 0 0-3 18.5c.5.1.6-.2.6-.4v-1.8c-2.5.5-3-1.1-3-1.1-.4-1-.9-1.3-.9-1.3-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.3.7.1-.5.3-.9.5-1.1-2-.2-4.1-1-4.1-4.4 0-1 .3-1.8.8-2.4-.1-.2-.4-1.1.1-2.4 0 0 .8-.3 2.5.9A8.8 8.8 0 0 1 12 6c.8 0 1.5.1 2.3.3 1.7-1.2 2.5-.9 2.5-.9.5 1.3.2 2.2.1 2.4.5.6.8 1.4.8 2.4 0 3.4-2.1 4.2-4.1 4.4.3.3.6.8.6 1.6v2.4c0 .2.2.5.6.4A9.5 9.5 0 0 0 12 2.5Z"/>
+                </svg>
+                GitHub
+              </button>
+            </div>
+            <p class="signin-note">
+              Already protected?
+              <a href="/login">Login</a>
+            </p>
+          </form>
+          {% endif %}
+          <p class="security-note">⌾ &nbsp; Secured by enterprise-grade encryption</p>
+        </div>
+        <aside class="auth-art">
+          <div class="art-grid">
+          </div>
+          <div class="bot-head">
+            <i>
+            </i>
+            <i>
+            </i>
+          </div>
+          <div class="bot-body">
+            <div class="bolt">ϟ</div>
+          </div>
+          <div class="bot-arm left">
+          </div>
+          <div class="bot-arm right">
+          </div>
+          <div class="bot-leg left">
+          </div>
+          <div class="bot-leg right">
+          </div>
+          <div class="art-platform">
+          </div>
+          <p>Your agent. Your rules.</p>
+        </aside>
+      </section>
+    </main>
+    <div class="toast">Demo complete — your account flow is ready to connect.</div>
+    <script src="{{ url_for('static', filename='script.js') }}">
+    </script>
+  </body>
+</html>
