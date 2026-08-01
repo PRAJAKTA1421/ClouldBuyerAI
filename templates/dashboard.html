@@ -75,8 +75,8 @@
             </button>
             <div class="account-avatar">P</div>
             <div>
-              <strong>Prajakta Patil</strong>
-              <small>Owner</small>
+              <strong>{{ user.username }}</strong>
+              <small>{{ user.role }}</small>
             </div>
           </div>
         </header>
@@ -95,25 +95,25 @@
           <div class="stat-grid">
             <article class="stat-card purple">
               <span>Total Agents</span>
-              <strong>3</strong>
+              <strong>{{ stats.agents }}</strong>
               <i>♙</i>
               <small>1 awaiting review</small>
             </article>
             <article class="stat-card green">
               <span>Active Agents</span>
-              <strong>2</strong>
+              <strong>{{ stats.active_agents }}</strong>
               <i>♙</i>
               <small>All policies active</small>
             </article>
             <article class="stat-card blue">
               <span>Wallet Balance</span>
-              <strong>₹75,430.50</strong>
+              <strong>₹{{ stats.wallet_balance }}</strong>
               <i>▣</i>
               <small>Across 3 wallets</small>
             </article>
             <article class="stat-card red">
               <span>Today's Spend</span>
-              <strong>₹12,340.00</strong>
+              <strong>₹{{ stats.today_spend }}</strong>
               <i>▣</i>
               <small>of ₹25,000 daily limit</small>
             </article>
@@ -186,7 +186,7 @@
                   <circle class="gauge-value" cx="105" cy="105" r="78"/>
                 </svg>
                 <div>
-                  <strong>28</strong>
+                  <strong>{{ stats.risk_score }}</strong>
                   <span>Low Risk</span>
                 </div>
               </div>

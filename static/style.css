@@ -1924,6 +1924,15 @@ body.agent-body .agent-content{
   background:linear-gradient(145deg,#0c152a,#091125);
   box-shadow:0 18px 38px rgba(0,0,0,.22);
 }
+.auth-error{
+    background:#ffeded;
+    color:#d32f2f;
+    border:1px solid #d32f2f;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:15px;
+    font-size:14px;
+}
 .transaction-request,.policy-check{padding:24px}
 .transaction-request{border-right:1px solid #22304e}
 .section-kicker,.policy-check h2{margin:0;color:#edf0fb;font:600 16px "Space Grotesk"}

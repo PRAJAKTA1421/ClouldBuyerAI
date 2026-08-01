@@ -9,3 +9,6 @@ instance/
 
 # Editor files
 .vscode/
+
+# Firebase secrets
+firebase/serviceAccountKey.json

@@ -1,13 +1,38 @@
 import json
 import os
+import random
+import secrets   # add this at the top of app.py
 from pathlib import Path
 from urllib.parse import urlencode
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from flask import Flask, jsonify, redirect, render_template, request, url_for
-
-
+from flask import (
+    Flask,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    url_for,
+    session,
+    flash
+)
+from firebase.firebase_config import auth, db
+from firebase_admin import auth as admin_auth, firestore
+from firebase.firebase_config import auth
+from services.dashboard_service import get_dashboard_stats
+from services.agent_service import (
+    create_agent,
+    get_all_agents,
+    delete_agent,
+    update_agent_status
+)
+from services.wallet_service import (
+    create_wallet,
+    get_all_wallets,
+    delete_wallet,
+    update_wallet_status
+)
 app = Flask(__name__)
 
 
@@ -25,31 +50,179 @@ def load_local_env():
 
 load_local_env()
 
+# Secret key for Flask sessions
+app.secret_key = os.getenv("SECRET_KEY", "CloudBuyerAI@2026")
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
-@app.route("/login")
+
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template("auth.html", mode="login")
+
+    if request.method == "GET":
+        return render_template("auth.html", mode="login")
+
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    try:
+        user = auth.sign_in_with_email_and_password(email, password)
+
+        session["user"] = {
+            "email": email,
+            "idToken": user["idToken"],
+            "localId": user["localId"]
+        }
+
+        return redirect(url_for("dashboard"))
+
+    except Exception as e:
+        import traceback
+
+        traceback.print_exc()
+        print("\n========== FIREBASE ERROR ==========")
+        print(e)
+        print("====================================\n")
+
+        flash(str(e))
+
+        return redirect(url_for("login"))
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("auth.html", mode="register")
 
+    if request.method == "GET":
+        return render_template("auth.html", mode="register")
+
+    username = request.form.get("username")
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    try:
+        # Create Firebase Authentication user
+        user = admin_auth.create_user(
+            email=email,
+            password=password,
+            display_name=username
+        )
+
+        # Save extra information in Firestore
+        db.collection("users").document(user.uid).set({
+            "uid": user.uid,
+            "username": username,
+            "email": email,
+            "role": "owner",
+            "createdAt": firestore.SERVER_TIMESTAMP
+        })
+
+        # Log in immediately
+        firebase_user = auth.sign_in_with_email_and_password(email, password)
+
+        session["user"] = {
+            "email": email,
+            "localId": firebase_user["localId"],
+            "idToken": firebase_user["idToken"]
+        }
+
+        flash("Registration successful!")
+        return redirect(url_for("dashboard"))
+
+    except Exception as e:
+        print(e)
+        flash("Registration failed. Email may already exist.")
+        return redirect(url_for("register"))
 
 @app.route("/dashboard")
 def dashboard():
-    return render_template("dashboard.html")
 
+    if "user" not in session:
+        return redirect(url_for("login"))
 
-@app.route("/agents")
+    stats = get_dashboard_stats()
+
+    user = {
+        "username": session["user"]["email"].split("@")[0],
+        "role": "Owner"
+    }
+
+    return render_template(
+         "dashboard.html",
+         stats=stats,
+         user=user
+    )
+
+@app.route("/agents", methods=["GET", "POST"])
 def agents():
-    return render_template("agents.html")
 
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+
+        data = {
+            "name": request.form.get("name"),
+            "type": request.form.get("type"),
+            "purpose": request.form.get("purpose"),
+            "description": request.form.get("description"),
+            "wallet": request.form.get("wallet"),
+            "model": request.form.get("model"),
+            "owner_uid": session["user"]["localId"]
+        }
+
+        try:
+
+            create_agent(data)
+
+            flash("Agent created successfully!")
+
+        except Exception as e:
+
+            flash(str(e))
+
+
+        return redirect(url_for("agents"))
+    agents = get_all_agents(session["user"]["localId"])
+    wallets = get_all_wallets(session["user"]["localId"])
+
+    return render_template(
+        "agents.html",
+        agents=agents,
+        wallets=wallets
+    )
+
+@app.route("/delete-agent/<agent_id>")
+def delete_agent_route(agent_id):
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    delete_agent(agent_id)
+
+    flash("Agent deleted!")
+
+    return redirect(url_for("agents"))
+
+@app.route("/freeze-agent/<agent_id>")
+def freeze_agent(agent_id):
+
+    update_agent_status(agent_id, "Frozen")
+
+    flash("Agent frozen.")
+
+    return redirect(url_for("agents"))
+
+@app.route("/activate-agent/<agent_id>")
+def activate_agent(agent_id):
+
+    update_agent_status(agent_id, "Active")
+
+    flash("Agent activated.")
+
+    return redirect(url_for("agents"))
 
 @app.route("/tasks")
 def tasks():
@@ -61,10 +234,60 @@ def assign_task():
     return render_template("assign_task.html")
 
 
-@app.route("/wallets")
+@app.route("/wallets", methods=["GET", "POST"])
 def wallets():
-    return render_template("wallets.html")
 
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+
+        wallet_address = "0x" + secrets.token_hex(20)
+
+        data = {
+            "wallet_name": request.form.get("wallet_name"),
+            "wallet_address": wallet_address,
+            "network": request.form.get("network"),
+            "balance": float(request.form.get("balance")),
+            "daily_limit": float(request.form.get("daily_limit")),
+            "owner_uid": session["user"]["localId"]
+        }
+
+        create_wallet(data)
+
+        flash("Wallet added successfully!")
+
+        return redirect(url_for("wallets"))
+
+    wallets = get_all_wallets(session["user"]["localId"])
+
+    return render_template(
+        "wallets.html",
+        wallets=wallets
+    )
+
+@app.route("/delete-wallet/<wallet_id>")
+def delete_wallet_route(wallet_id):
+
+    delete_wallet(wallet_id)
+
+    return redirect(url_for("wallets"))
+
+
+@app.route("/freeze-wallet/<wallet_id>")
+def freeze_wallet(wallet_id):
+
+    update_wallet_status(wallet_id, "Frozen")
+
+    return redirect(url_for("wallets"))
+
+
+@app.route("/activate-wallet/<wallet_id>")
+def activate_wallet(wallet_id):
+
+    update_wallet_status(wallet_id, "Active")
+
+    return redirect(url_for("wallets"))
 
 @app.route("/transactions")
 def transactions():
@@ -152,5 +375,16 @@ def chat():
         return jsonify(error="The assistant is temporarily unavailable. Please try again."), 502
 
 
+@app.route("/logout")
+def logout():
+
+    session.clear()
+
+    flash("Logged out successfully")
+
+    return redirect(url_for("login"))
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+

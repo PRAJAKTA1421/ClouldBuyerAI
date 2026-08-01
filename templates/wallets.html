@@ -112,11 +112,47 @@
                 <strong>Coinbase Wallet</strong>
                 <button data-wallet-connect="Coinbase Wallet">Connect</button>
               </div>
-              <div class="wallet-row">
-                <span class="wallet-logo ks">K</span>
-                <strong>KillSwitch Virtual Wallet</strong>
-                <button data-wallet-connect="KillSwitch Virtual Wallet">Create New</button>
-              </div>
+              <form action="/wallets" method="POST" class="wallet-row">
+
+    <span class="wallet-logo ks">K</span>
+
+    <strong>KillSwitch Virtual Wallet</strong>
+
+    <input
+        type="hidden"
+        name="wallet_name"
+        value="KillSwitch Wallet"
+    >
+
+    <input
+        type="hidden"
+        name="wallet_address"
+        value="KS{{ range(100000,999999)|random }}"
+    >
+
+    <input
+        type="hidden"
+        name="network"
+        value="KillSwitch"
+    >
+
+    <input
+        type="hidden"
+        name="balance"
+        value="50000"
+    >
+
+    <input
+        type="hidden"
+        name="daily_limit"
+        value="50000"
+    >
+
+    <button type="submit">
+        Create New
+    </button>
+
+</form>
             </section>
             <aside class="wallet-summary">
               <h2>Wallet Summary</h2>
@@ -209,6 +245,59 @@
               </div>
             </article>
           </section>
+          <hr style="margin:40px 0;">
+
+<h2>Connected Wallets</h2>
+
+<table style="width:100%; color:white; border-collapse:collapse;">
+
+    <tr>
+        <th>Name</th>
+        <th>Network</th>
+        <th>Balance</th>
+        <th>Status</th>
+        <th>Assigned Agents</th>
+        <th>Action</th>
+    </tr>
+
+    {% for wallet in wallets %}
+
+    <tr>
+
+        <td>{{ wallet.wallet_name }}</td>
+
+        <td>{{ wallet.network }}</td>
+
+        <td>₹{{ wallet.balance }}</td>
+
+        <td>{{ wallet.status }}</td>
+        <td>
+    {{ wallet.agent_count }}
+</td>
+
+        <td>
+
+            {% if wallet.status=="Active" %}
+
+            <a href="/freeze-wallet/{{ wallet.id }}">Freeze</a>
+
+            {% else %}
+
+            <a href="/activate-wallet/{{ wallet.id }}">Activate</a>
+
+            {% endif %}
+
+            |
+
+            <a href="/delete-wallet/{{ wallet.id }}">Delete</a>
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
           <p class="wallet-security">⌾ Your private keys are never stored. All connections are secure.</p>
         </section>
       </main>

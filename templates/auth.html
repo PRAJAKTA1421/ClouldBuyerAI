@@ -31,15 +31,32 @@
             <a href="/register" class="{{ 'active' if mode == 'register' else '' }}">Register</a>
           </div>
           {% if mode == 'login' %}
-          <form class="form-grid" data-demo-form>
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="error-box">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+          {% endwith %}
+          <form class="form-grid" action="/login" method="POST">
             <label>
               Email
-              <input type="email" placeholder="Enter your email" required>
+              <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  required
+          >
             </label>
             <label>
               Password
               <div class="password-wrap">
-                <input type="password" placeholder="Enter your password" required>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Enter your password"
+                  required
+            >
                 <button type="button" class="toggle-password">◌</button>
               </div>
             </label>
@@ -71,19 +88,27 @@
             </div>
           </form>
           {% else %}
-          <form class="form-grid" data-demo-form>
+          <form class="form-grid" action="/register" method="POST">
             <label>
               Username
               <input type="text" name="username" placeholder="Choose a username" required>
             </label>
             <label>
               Work email
-              <input type="email" placeholder="Enter your email" required>
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required>
             </label>
             <label>
               Password
               <div class="password-wrap">
-                <input type="password" placeholder="Create a password" required>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Create a password"
+                    required>
                 <button type="button" class="toggle-password">◌</button>
               </div>
             </label>

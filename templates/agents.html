@@ -99,14 +99,21 @@
                   <p>Configure an agent and secure its wallet before it starts working.</p>
                 </div>
               </div>
-              <form class="agent-form" data-agent-form>
+              <form
+                  class="agent-form"
+                  action="/agents"
+                  method="POST">
                 <label>
                   Agent Name
-                  <input type="text" placeholder="Enter agent name" required>
+                  <input
+                      type="text"
+                      name="name"
+                      placeholder="Enter agent name"
+                      required>
                 </label>
                 <label>
                   Agent Type
-                  <select required>
+                  <select name="type" required>
                     <option value="" selected disabled>Select agent type</option>
                     <option>Shopping Agent</option>
                     <option>Research Agent</option>
@@ -116,24 +123,46 @@
                 </label>
                 <label>
                   Purpose
-                  <input type="text" placeholder="What should this agent do?" required>
+                  <input
+                      type="text"
+                      name="purpose"
+                      placeholder="What should this agent do?"
+                      required>
                 </label>
                 <label>
                   Description
-                  <textarea placeholder="Describe the agent's responsibilities and rules" required>
+                  <textarea
+                      name="description"
+                      placeholder="Describe the agent's responsibilities and rules"
+                      required></textarea>
                   </textarea>
                 </label>
                 <label>
-                  Select Wallet
-                  <select required>
-                    <option value="" selected disabled>Select a wallet</option>
-                    <option>0x45A...Bb7f (₹75,430.50)</option>
-                    <option>0x98C...A21d (₹30,250.00)</option>
-                  </select>
-                </label>
+    Select Wallet
+
+    <select name="wallet" required>
+
+        <option value="">Select Wallet</option>
+
+        {% for wallet in wallets %}
+
+        {% if wallet.status == "Active" %}
+
+        <option value="{{ wallet.wallet_address }}">
+            {{ wallet.wallet_name }}
+            (₹{{ wallet.balance }})
+        </option>
+
+        {% endif %}
+
+        {% endfor %}
+
+    </select>
+
+</label>
                 <label>
                   Select AI Model
-                  <select required>
+                  <select name="model" required>
                     <option value="" selected disabled>Select AI model</option>
                     <option>GPT-4o</option>
                     <option>GPT-4.1 mini</option>
@@ -148,6 +177,76 @@
                   </button>
                 </div>
               </form>
+              <hr style="margin:40px 0">
+
+<h2>Your AI Agents</h2>
+
+{% if agents %}
+
+<div class="agent-list">
+
+{% for agent in agents %}
+
+<div class="agent-card">
+
+<h3>{{ agent.name }}</h3>
+
+<p><strong>Type:</strong> {{ agent.type }}</p>
+
+<p>
+    <strong>Wallet:</strong>
+    {{ agent.wallet_name }}
+    <br>
+    <small>{{ agent.wallet }}</small>
+</p>
+
+<p><strong>Model:</strong> {{ agent.model }}</p>
+
+<p><strong>Status:</strong>
+
+{% if agent.status=="Active" %}
+<span style="color:limegreen;">🟢 Active</span>
+{% else %}
+<span style="color:red;">🔴 Frozen</span>
+{% endif %}
+
+</p>
+
+<div class="agent-actions">
+
+<a href="/freeze-agent/{{ agent.id }}">
+<button type="button">
+Freeze
+</button>
+</a>
+
+<a href="/activate-agent/{{ agent.id }}">
+<button type="button">
+Activate
+</button>
+</a>
+
+<a href="/delete-agent/{{ agent.id }}">
+<button
+type="button"
+style="background:red;">
+Delete
+</button>
+</a>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<p>No agents created yet.</p>
+
+{% endif %}
             </section>
           </div>
         </section>
