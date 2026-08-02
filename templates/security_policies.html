@@ -90,59 +90,165 @@
             <h1>Set Security Policies</h1>
             <p>Define rules and limits for your agent.</p>
           </div>
-          <form class="security-policy-form">
-            <section class="policy-form-card">
-              <h2>Spend Limits</h2>
-              <label>
-                Daily Spend Limit
-                <input type="text" value="₹ 20,000">
-                <small>Maximum total amount agent can spend per day</small>
-              </label>
-              <label>
-                Per Transaction Limit
-                <input type="text" value="₹ 5,000">
-                <small>Maximum amount per single transaction</small>
-              </label>
-              <label>
-                Monthly Spend Limit
-                <input type="text" value="₹ 5,00,000">
-                <small>Maximum total amount agent can spend per month</small>
-              </label>
-            </section>
-            <section class="policy-form-card counterparties-card">
-              <h2>Allowlisted Counterparties</h2>
-              <p>Add approved wallets / vendors</p>
-              <div class="counterparty">
-                <span class="counterparty-logo aws-mark">aws</span>
-                <span>
-                  <strong>AWS (India)</strong>
-                  <small>0xA12...9f8b</small>
-                </span>
-                <b>›</b>
-              </div>
-              <div class="counterparty">
-                <span class="counterparty-logo google-mark">G</span>
-                <span>
-                  <strong>Google Cloud</strong>
-                  <small>0xB45...cd12</small>
-                </span>
-                <b>›</b>
-              </div>
-              <div class="counterparty">
-                <span class="counterparty-logo azure-mark">A</span>
-                <span>
-                  <strong>Azure</strong>
-                  <small>0xC78...ef34</small>
-                </span>
-                <b>›</b>
-              </div>
-              <button class="add-counterparty" type="button">＋ Add New</button>
-            </section>
-            <div class="policy-actions">
-              <a href="/dashboard">Back</a>
-              <button type="submit">Save &amp; Continue</button>
-            </div>
-          </form>
+          <div class="policy-toolbar">
+
+    <button class="new-agent-link"
+            onclick="openPolicyModal()">
+
+        + New Policy
+
+    </button>
+
+</div>
+
+<div class="policy-grid">
+
+{% for policy in policies %}
+
+<div class="policy-card">
+
+    <div class="policy-header">
+
+        <div>
+
+            <h3>{{ policy.name }}</h3>
+
+            <small>{{ policy.type }}</small>
+
+        </div>
+
+        <span class="status status-{% if policy.enabled %}active{% else %}inactive{% endif %}">
+            {% if policy.enabled %}
+                Enabled
+            {% else %}
+                Disabled
+            {% endif %}
+        </span>
+
+    </div>
+
+    <div class="policy-body">
+
+        <div class="policy-item">
+            <span>Policy Value</span>
+            <strong>{{ policy.value }}</strong>
+        </div>
+
+        <div class="policy-item">
+            <span>Priority</span>
+            <strong>{{ policy.priority }}</strong>
+        </div>
+
+        <div class="policy-item">
+            <span>Created</span>
+            <strong>{{ policy.created_at or "Today" }}</strong>
+        </div>
+
+    </div>
+
+    <div class="policy-actions">
+
+        {% if policy.enabled %}
+
+        <a href="/disable-policy/{{ policy.id }}"
+           class="action-btn pause-btn">
+            Disable
+        </a>
+
+        {% else %}
+
+        <a href="/enable-policy/{{ policy.id }}"
+           class="action-btn start-btn">
+            Enable
+        </a>
+
+        {% endif %}
+
+        <a href="/delete-policy/{{ policy.id }}"
+           class="action-btn delete-btn"
+           onclick="return confirm('Delete this policy?')">
+            Delete
+        </a>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</div>
+<div id="policyModal" class="task-modal">
+
+    <div class="task-modal-content">
+
+        <div class="modal-header">
+
+            <h2>Create Policy</h2>
+
+            <button onclick="closePolicyModal()">
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <form action="/create-policy"
+              method="POST">
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Policy Name"
+                required>
+
+            <select
+                name="type"
+                required>
+
+                <option>Daily Spending Limit</option>
+
+                <option>Transaction Limit</option>
+
+                <option>Wallet Allowlist</option>
+
+                <option>Wallet Blocklist</option>
+
+                <option>Country Restriction</option>
+
+                <option>Time Restriction</option>
+
+                <option>Human Approval</option>
+
+            </select>
+
+            <input
+                type="text"
+                name="value"
+                placeholder="Policy Value"
+                required>
+
+            <select name="priority">
+
+                <option>Low</option>
+
+                <option selected>Medium</option>
+
+                <option>High</option>
+
+            </select>
+
+            <button type="submit">
+
+                Create Policy
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
         </section>
       </main>
     </div>

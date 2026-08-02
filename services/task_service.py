@@ -1,6 +1,7 @@
+from datetime import datetime
+
 from firebase.firebase_config import db
 from firebase_admin import firestore
-
 
 def create_task(data):
 
@@ -18,12 +19,19 @@ def create_task(data):
 
         "status": "Pending",
 
+        "progress": 0,
+
+        "started_at": None,
+
+        "completed_at": None,
+
+        "execution_time": 0,
+
         "owner_uid": data["owner_uid"],
 
         "created_at": firestore.SERVER_TIMESTAMP
 
     })
-
 
 def get_all_tasks(owner_uid):
 
@@ -50,8 +58,31 @@ def delete_task(task_id):
 
 def update_task_status(task_id, status):
 
+    update_data = {
+        "status": status
+    }
+
+    if status == "Running":
+
+        update_data["started_at"] = datetime.utcnow()
+
+    elif status == "Completed":
+
+        update_data["completed_at"] = datetime.utcnow()
+
+        update_data["execution_time"] = "2 min"
+
+        update_data["progress"] = 100
+
+    db.collection("tasks").document(task_id).update(update_data)
+
+
+def update_task_progress(task_id, progress):
+
     db.collection("tasks").document(task_id).update({
 
-        "status": status
+        "progress": progress,
+
+        "execution_time": firestore.Increment(1)
 
     })

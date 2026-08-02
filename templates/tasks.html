@@ -41,7 +41,7 @@
             <i>⌾</i>
             Security Policies
           </a>
-          <a href="monitoring">
+          <a href="/monitoring">
             <i>◌</i>
             Monitoring
           </a>
@@ -132,11 +132,13 @@
 
         <h3>{{ task.title }}</h3>
 
-        <span class="status">
+        <span
+    id="status-{{ task.id }}"
+    class="status status-{{ task.status|lower }}">
 
-            {{ task.status }}
+    {{ task.status }}
 
-        </span>
+</span>
 
     </div>
 
@@ -162,15 +164,110 @@
 
     <p>
 
-        <strong>Priority:</strong>
+    <strong>Priority:</strong>
 
-        {{ task.priority }}
+    {{ task.priority }}
+
+</p>
+
+<div class="task-progress">
+
+    <div class="progress-top">
+        <span>Progress</span>
+        <span id="progress-text-{{ task.id }}">
+    {{ task.progress }}%
+</span>
+    </div>
+
+    <div class="progress-bar">
+
+        <div
+    id="progress-bar-{{ task.id }}"
+    class="progress-fill"
+    style="width: {{ task.progress }}%;">
+</div>
+
+    </div>
+
+</div>
+
+<div class="task-info">
+
+    <p>
+        <strong>Started:</strong>
+
+        {% if task.started_at %}
+            {{ task.started_at }}
+        {% else %}
+            --
+        {% endif %}
+    </p>
+
+    <p>
+        <strong>Completed:</strong>
+
+        {% if task.completed_at %}
+            {{ task.completed_at }}
+        {% else %}
+            --
+        {% endif %}
+    </p>
+
+    <p>
+        <strong>Execution:</strong>
+
+        <span id="execution-{{ task.id }}">
+    {{ task.execution_time }}
+</span> sec
 
     </p>
 
 </div>
 
+<div class="task-actions">
+
+    {% if task.status == "Pending" %}
+
+    <a href="/start-task/{{ task.id }}" class="action-btn start-btn">
+        ▶ Start
+    </a>
+
+    {% elif task.status == "Running" %}
+
+    <a href="/pause-task/{{ task.id }}" class="action-btn pause-btn">
+        ⏸ Pause
+    </a>
+
+    <a href="/complete-task/{{ task.id }}" class="action-btn complete-btn">
+        ✓ Complete
+    </a>
+
+    <a href="/fail-task/{{ task.id }}" class="action-btn fail-btn">
+        ✕ Fail
+    </a>
+
+    {% elif task.status == "Paused" %}
+
+    <a href="/resume-task/{{ task.id }}" class="action-btn resume-btn">
+        ▶ Resume
+    </a>
+
+    {% endif %}
+
+    <a href="/delete-task/{{ task.id }}"
+       class="action-btn delete-btn"
+       onclick="return confirm('Delete this task?');">
+
+        🗑 Delete
+
+    </a>
+
+</div>
+
+</div>
+
 {% endfor %}
+
 
 </div>
           {% if not tasks %}
@@ -290,7 +387,51 @@
 </div>
       </main>
     </div>
-    <script src="{{ url_for('static', filename='script.js') }}">
-    </script>
-  </body>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <script>
+
+    function watchTask(taskId){
+
+        setInterval(function(){
+
+            fetch("/task-progress/" + taskId)
+
+            .then(response => response.json())
+
+            .then(task => {
+
+                if(task.error){
+                    return;
+                }
+
+                document.getElementById("status-" + taskId).innerText =
+                    task.status;
+
+                document.getElementById("progress-text-" + taskId).innerText =
+                    task.progress + "%";
+
+                document.getElementById("progress-bar-" + taskId).style.width =
+                    task.progress + "%";
+
+                document.getElementById("execution-" + taskId).innerText =
+                    task.execution_time;
+
+            })
+
+            .catch(error => console.log(error));
+
+        },1000);
+
+    }
+
+    {% for task in tasks %}
+
+    watchTask("{{ task.id }}");
+
+    {% endfor %}
+
+  </script>
+
+</body>
 </html>

@@ -216,3 +216,35 @@ setTimeout(function(){
     });
 
 },3000);
+
+function openTransactionModal() {
+
+    document.getElementById("transactionModal").style.display = "flex";
+
+}
+
+function closeTransactionModal() {
+
+    document.getElementById("transactionModal").style.display = "none";
+
+}
+
+window.onclick = function(event) {
+
+    const modal = document.getElementById("transactionModal");
+
+    if (event.target == modal) {
+
+        modal.style.display = "none";
+
+    }
+
+}
+
+function openPolicyModal() {
+    document.getElementById("policyModal").style.display = "flex";
+}
+
+function closePolicyModal() {
+    document.getElementById("policyModal").style.display = "none";
+}

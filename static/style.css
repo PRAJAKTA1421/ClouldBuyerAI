@@ -2137,3 +2137,364 @@ border-radius:12px;
 margin-bottom:12px;
 
 }
+
+/* ===== TASK PROGRESS ===== */
+
+.task-progress{
+    margin:18px 0;
+}
+
+.progress-top{
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+    margin-bottom:8px;
+    color:#9ca3af;
+}
+
+.progress-bar{
+    width:100%;
+    height:8px;
+    background:#232937;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    background:linear-gradient(90deg,#6d5dfc,#4f46e5);
+    border-radius:20px;
+    transition:0.4s;
+}
+
+/* ==========================
+   TASK ACTION BUTTONS
+========================== */
+
+.task-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:20px;
+}
+
+.action-btn{
+    padding:10px 18px;
+    border-radius:10px;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+    color:#fff;
+    transition:0.25s ease;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:110px;
+}
+
+.action-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+}
+
+/* Start */
+
+.start-btn{
+    background:#2563eb;
+}
+
+.start-btn:hover{
+    background:#1d4ed8;
+}
+
+/* Resume */
+
+.resume-btn{
+    background:#3b82f6;
+}
+
+.resume-btn:hover{
+    background:#2563eb;
+}
+
+/* Pause */
+
+.pause-btn{
+    background:#f59e0b;
+}
+
+.pause-btn:hover{
+    background:#d97706;
+}
+
+/* Complete */
+
+.complete-btn{
+    background:#16a34a;
+}
+
+.complete-btn:hover{
+    background:#15803d;
+}
+
+/* Fail */
+
+.fail-btn{
+    background:#dc2626;
+}
+
+.fail-btn:hover{
+    background:#b91c1c;
+}
+
+/* Delete */
+
+.delete-btn{
+    background:#374151;
+}
+
+.delete-btn:hover{
+    background:#1f2937;
+}
+
+.transaction-toolbar{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:25px;
+}
+
+.transaction-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(600px,1fr));
+    gap:24px;
+}
+.transaction-card{
+    background:#141b2d;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    overflow:hidden;
+    transition:.3s;
+}
+
+.transaction-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 15px 35px rgba(0,0,0,.35);
+}
+
+.transaction-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:24px;
+}
+
+.transaction-header h3{
+    margin:0;
+    font-size:34px;
+    color:#fff;
+}
+
+.transaction-header small{
+    display:block;
+    margin-top:6px;
+    color:#98a2b3;
+    font-size:15px;
+}
+.status{
+    padding:8px 18px;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.status-pending{
+    background:#184f2b;
+    color:#49e36d;
+}
+
+.status-approved{
+    background:#184f2b;
+    color:#49e36d;
+}
+
+.status-rejected{
+    background:#5b1d1d;
+    color:#ff5d5d;
+}
+
+.transaction-actions{
+    display:flex;
+    gap:18px;
+    padding:0 24px 24px;
+}
+
+.transaction-actions a{
+    flex:1;
+    text-align:center;
+    padding:16px;
+    border-radius:12px;
+    text-decoration:none;
+    color:#fff;
+    font-weight:600;
+}
+
+.transaction-policy{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    padding:22px 24px 10px;
+}
+
+
+.policy{
+    padding:6px 14px;
+    border-radius:30px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.pass{
+    background:#163b25;
+    color:#36d67c;
+}
+
+.warning{
+    background:#4d3d11;
+    color:#ffc857;
+}
+
+.risk-low{
+    color:#3ddc84;
+}
+
+.transaction-actions{
+    display:flex;
+    gap:15px;
+}
+
+.approve-btn{
+    background:#16a34a;
+}
+
+.reject-btn{
+    background:#dc2626;
+}
+
+.approve-btn:hover{
+    background:#15803d;
+}
+
+.reject-btn:hover{
+    background:#b91c1c;
+}
+
+.transaction-body{
+    padding:0 24px;
+    border-top:1px solid rgba(255,255,255,.08);
+}
+
+.transaction-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    padding:18px 0;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.transaction-row:last-child{
+    border-bottom:none;
+}
+
+.transaction-row span{
+    color:#98a2b3;
+    font-size:15px;
+}
+
+.transaction-row span{
+    width:150px;
+    color:#98a2b3;
+    font-size:15px;
+    flex-shrink:0;
+}
+.transaction-row strong{
+    color:#fff;
+    font-size:17px;
+    font-weight:600;
+    flex:1;
+    text-align:right;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.policy-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(350px,1fr));
+    gap:24px;
+    margin-top:30px;
+}
+
+.policy-card{
+    background:#111827;
+    border:1px solid #283247;
+    border-radius:18px;
+    padding:24px;
+    transition:.3s;
+}
+
+.policy-card:hover{
+    transform:translateY(-5px);
+    border-color:#4f7cff;
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+}
+
+.policy-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.policy-header h3{
+    color:white;
+    margin-bottom:4px;
+}
+
+.policy-header small{
+    color:#94a3b8;
+}
+
+.policy-body{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    margin-bottom:22px;
+}
+
+.policy-item{
+    display:flex;
+    justify-content:space-between;
+    padding:12px;
+    border-radius:12px;
+    background:#1b2536;
+}
+
+.policy-item span{
+    color:#9ca3af;
+}
+
+.policy-item strong{
+    color:white;
+}
+
+.policy-actions{
+    display:flex;
+    gap:12px;
+}
+
+.policy.fail{
+    background:#3b1212;
+    color:#ff6b6b;
+    border:1px solid #ff4d4f;
+}

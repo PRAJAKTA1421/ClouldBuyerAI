@@ -17,6 +17,7 @@ from flask import (
     session,
     flash
 )
+from datetime import datetime
 from firebase.firebase_config import auth, db
 from firebase_admin import auth as admin_auth, firestore
 from firebase.firebase_config import auth
@@ -37,7 +38,19 @@ from services.task_service import (
     create_task,
     get_all_tasks,
     delete_task,
-    update_task_status
+    update_task_status,
+    update_task_progress
+)
+from services.transaction_service import (
+    create_transaction,
+    get_all_transactions,
+    update_transaction_status
+)
+from services.policy_services import (
+    create_policy,
+    get_all_policies,
+    update_policy_status,
+    delete_policy
 )
 app = Flask(__name__)
 
@@ -300,6 +313,136 @@ def create_task_route():
 
     return redirect(url_for("tasks"))
 
+@app.route("/start-task/<task_id>")
+def start_task(task_id):
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    db.collection("tasks").document(task_id).update({
+        "status": "Running",
+        "progress": 10,
+        "started_at": firestore.SERVER_TIMESTAMP
+    })
+
+    flash("Task started successfully!")
+
+    return redirect(url_for("tasks"))
+
+@app.route("/pause-task/<task_id>")
+def pause_task(task_id):
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    update_task_status(task_id, "Paused")
+
+    flash("Task paused.")
+
+    return redirect(url_for("tasks"))
+
+@app.route("/resume-task/<task_id>")
+def resume_task(task_id):
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    update_task_status(task_id, "Running")
+
+    flash("Task resumed.")
+
+    return redirect(url_for("tasks"))
+
+@app.route("/complete-task/<task_id>")
+def complete_task(task_id):
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    task_ref = db.collection("tasks").document(task_id)
+    task = task_ref.get().to_dict()
+
+    execution_time = 0
+
+    if task.get("started_at"):
+
+        execution_time = (
+            datetime.utcnow() -
+            task["started_at"].replace(tzinfo=None)
+        ).total_seconds()
+
+    task_ref.update({
+        "status": "Completed",
+        "progress": 100,
+        "completed_at": firestore.SERVER_TIMESTAMP,
+        "execution_time": round(execution_time, 2)
+    })
+
+    flash("Task completed!")
+
+    return redirect(url_for("tasks"))
+
+@app.route("/fail-task/<task_id>")
+def fail_task(task_id):
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    update_task_status(task_id, "Failed")
+
+    flash("Task failed.")
+
+    return redirect(url_for("tasks"))
+
+@app.route("/delete-task/<task_id>")
+def delete_task_route(task_id):
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    delete_task(task_id)
+
+    flash("Task deleted.")
+
+    return redirect(url_for("tasks"))
+
+@app.route("/task-progress/<task_id>")
+def task_progress(task_id):
+
+    doc = db.collection("tasks").document(task_id).get()
+
+    if not doc.exists:
+        return jsonify({"error": "Task not found"}), 404
+
+    task = doc.to_dict()
+
+    progress = task.get("progress", 0)
+    status = task.get("status", "Pending")
+    execution_time = task.get("execution_time", 0)
+
+    # Increase progress only while task is running
+    if status == "Running":
+
+        progress += random.randint(2, 6)
+        execution_time += 2     # because frontend polls every 2 seconds
+
+        if progress >= 100:
+            progress = 100
+            status = "Completed"
+
+        db.collection("tasks").document(task_id).update({
+            "progress": progress,
+            "status": status,
+            "execution_time": execution_time
+        })
+
+    return jsonify({
+        "id": doc.id,
+        "progress": progress,
+        "status": status,
+        "execution_time": execution_time
+    })
+
 @app.route("/assign-task")
 def assign_task():
     return render_template("assign_task.html")
@@ -362,13 +505,164 @@ def activate_wallet(wallet_id):
 
 @app.route("/transactions")
 def transactions():
-    return render_template("transactions.html")
 
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    transactions = get_all_transactions(
+        session["user"]["localId"]
+    )
+
+    wallets = get_all_wallets(
+        session["user"]["localId"]
+    )
+
+    return render_template(
+        "transactions.html",
+        transactions=transactions,
+        wallets=wallets
+    )
+
+@app.route("/create-transaction", methods=["POST"])
+def create_transaction_route():
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+
+    wallet_name = request.form.get("wallet")
+
+
+    # Get available wallets from Firebase
+    wallets = get_all_wallets(
+        session["user"]["localId"]
+    )
+
+
+    selected_wallet = None
+
+
+    # Find selected wallet
+    for wallet in wallets:
+
+        if wallet["wallet_name"] == wallet_name:
+            selected_wallet = wallet
+            break
+
+
+    # Wallet validation
+    if selected_wallet is None:
+
+        flash("Invalid wallet selected.")
+
+        return redirect(url_for("transactions"))
+
+
+
+    data = {
+
+        "merchant": request.form.get("merchant"),
+
+        "wallet": selected_wallet["wallet_name"],
+
+        "wallet_address": selected_wallet["wallet_address"],
+
+        "network": selected_wallet["network"],
+
+        "amount": float(request.form.get("amount")),
+
+        "purpose": request.form.get("purpose"),
+
+        "owner_uid": session["user"]["localId"]
+
+    }
+
+
+    create_transaction(data)
+
+
+    flash("Transaction created successfully!")
+
+
+    return redirect(url_for("transactions"))
+
+@app.route("/approve-transaction/<transaction_id>")
+def approve_transaction(transaction_id):
+
+    update_transaction_status(transaction_id, "Approved")
+
+    flash("Transaction approved!")
+
+    return redirect(url_for("transactions"))
+
+@app.route("/reject-transaction/<transaction_id>")
+def reject_transaction(transaction_id):
+
+    update_transaction_status(transaction_id, "Rejected")
+
+    flash("Transaction rejected!")
+
+    return redirect(url_for("transactions"))
 
 @app.route("/security-policies")
 def security_policies():
-    return render_template("security_policies.html")
 
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    policies = get_all_policies(
+        session["user"]["localId"]
+    )
+
+    return render_template(
+        "security_policies.html",
+        policies=policies
+    )
+
+@app.route("/create-policy", methods=["POST"])
+def create_policy_route():
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    data = {
+
+        "name": request.form.get("name"),
+        "type": request.form.get("type"),
+        "value": request.form.get("value"),
+        "priority": request.form.get("priority"),
+        "owner_uid": session["user"]["localId"]
+
+    }
+
+    create_policy(data)
+
+    flash("Policy created successfully!")
+
+    return redirect(url_for("security_policies"))
+
+@app.route("/enable-policy/<policy_id>")
+def enable_policy(policy_id):
+
+    update_policy_status(policy_id, True)
+
+    return redirect(url_for("security_policies"))
+
+
+@app.route("/disable-policy/<policy_id>")
+def disable_policy(policy_id):
+
+    update_policy_status(policy_id, False)
+
+    return redirect(url_for("security_policies"))
+
+
+@app.route("/delete-policy/<policy_id>")
+def delete_policy_route(policy_id):
+
+    delete_policy(policy_id)
+
+    return redirect(url_for("security_policies"))
 
 @app.route("/monitoring")
 def monitoring():
