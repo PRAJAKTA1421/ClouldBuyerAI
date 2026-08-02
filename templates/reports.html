@@ -7,7 +7,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   </head>
-  <body class="dashboard-body">
+  <body
+class="dashboard-body"
+
+data-trend='{{ report.spending_trend | tojson }}'
+
+data-category-labels='{{ report.category_labels | tojson }}'
+
+data-category-values='{{ report.category_values | tojson }}'
+>
     <div class="dashboard-layout">
       <aside class="dashboard-sidebar">
         <a class="dashboard-brand" href="/">
@@ -97,86 +105,96 @@
               Date Range
               <input value="01 May 2025 – 29 May 2025">
             </label>
-            <label>
-              Export
-              <select>
-                <option>PDF</option>
-                <option>CSV</option>
-              </select>
-            </label>
+           <label>
+    Export Report
+</label>
+
+<button id="exportPdfBtn" class="export-btn">
+    📄 Download PDF
+</button>
+<input type="hidden" id="trendImage">
+<input type="hidden" id="pieImage">
           </div>
           <div class="report-stats">
             <article>
               <span>Total Transactions</span>
-              <strong>24</strong>
+              <strong>{{ report.total_transactions }}</strong>
             </article>
             <article class="report-green">
               <span>Successful</span>
-              <strong>16</strong>
+              <strong>{{ report.successful }}</strong>
             </article>
             <article class="report-red">
               <span>Blocked</span>
-              <strong>8</strong>
+              <strong>{{ report.blocked }}</strong>
             </article>
             <article>
               <span>Total Spend</span>
-              <strong>₹56,930.50</strong>
+              <strong>₹{{ "%.2f"|format(report.total_spend) }}</strong>
             </article>
           </div>
           <div class="report-charts">
             <article>
               <h2>Spending Trend</h2>
-              <div class="trend-chart">
-                <span>₹40K</span>
-                <span>₹30K</span>
-                <span>₹20K</span>
-                <span>₹10K</span>
-                <svg viewBox="0 0 440 175">
-                  <path d="M15 153L75 119 108 127 150 98 195 106 244 66 286 82 333 34 375 45 422 8"/>
-                </svg>
-                <div class="chart-dates">
-                  <b>01 May</b>
-                  <b>08 May</b>
-                  <b>15 May</b>
-                  <b>22 May</b>
-                  <b>29 May</b>
-                </div>
-              </div>
+              <div class="report-chart-container">
+
+    <canvas id="spendingTrendChart"></canvas>
+
+</div>
             </article>
             <article>
               <h2>Spend by Category</h2>
-              <div class="category-chart">
-                <div class="donut">
-                </div>
-                <ul>
-                  <li>
-                    <i class="blue">
-                    </i>
-                    Compute (45%)
-                  </li>
-                  <li>
-                    <i class="red">
-                    </i>
-                    Storage (25%)
-                  </li>
-                  <li>
-                    <i class="yellow">
-                    </i>
-                    API (20%)
-                  </li>
-                  <li>
-                    <i class="purple">
-                    </i>
-                    Database (10%)
-                  </li>
-                </ul>
-              </div>
+              <div class="report-chart-container">
+
+    <canvas id="categoryChart"></canvas>
+
+</div>
             </article>
           </div>
         </section>
       </main>
     </div>
-    <script src="{{ url_for('static', filename='script.js') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<script>
+const exportSelect = document.querySelector(".report-filters select:last-of-type");
+
+exportSelect.addEventListener("change", function () {
+
+    if (this.value !== "PDF") return;
+
+    const trendChart = Chart.getChart("spendingTrendChart");
+    const pieChart = Chart.getChart("categoryChart");
+
+    const trendImage = trendChart.toBase64Image();
+    const pieImage = pieChart.toBase64Image();
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/export-pdf";
+
+    const trend = document.createElement("input");
+    trend.type = "hidden";
+    trend.name = "trend";
+    trend.value = trendImage;
+
+    const pie = document.createElement("input");
+    pie.type = "hidden";
+    pie.name = "pie";
+    pie.value = pieImage;
+
+    form.appendChild(trend);
+    form.appendChild(pie);
+
+    document.body.appendChild(form);
+
+    form.submit();
+
+});
+</script>
+      
     </script>
   </body>
 </html>

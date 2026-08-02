@@ -9,7 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
-  <body class="dashboard-body">
+  <body 
+class="dashboard-body"
+data-amounts='{{ data.amounts | tojson }}'
+data-statuses='{{ data.statuses | tojson }}'
+data-risk='{{ data.risk_points | tojson }}'
+>
     <div class="dashboard-layout">
       <aside class="dashboard-sidebar">
         <a class="dashboard-brand" href="/">
@@ -93,59 +98,229 @@
             <button>Logs</button>
           </div>
           <section class="monitor-table">
-            <div class="monitor-row monitor-head">
-              <span>Time</span>
-              <span>Activity</span>
-              <span>Amount</span>
-              <span>Status</span>
-            </div>
-            <div class="monitor-row">
-              <span>10:31:22</span>
-              <strong>Searching AWS EC2 instances</strong>
-              <span>—</span>
-              <em class="progress">In Progress</em>
-            </div>
-            <div class="monitor-row">
-              <span>10:31:45</span>
-              <strong>Found best GPU instance</strong>
-              <span>—</span>
-              <em class="success">Success</em>
-            </div>
-            <div class="monitor-row">
-              <span>10:32:05</span>
-              <strong>Requesting payment to AWS</strong>
-              <span>₹18,500.00</span>
-              <em class="pending">Pending Review</em>
-            </div>
-            <div class="monitor-row">
-              <span>10:32:07</span>
-              <strong>Policy check in progress</strong>
-              <span>—</span>
-              <em class="progress">In Progress</em>
-            </div>
-          </section>
+
+<div class="monitor-row monitor-head">
+    <span>Time</span>
+    <span>Activity</span>
+    <span>Amount</span>
+    <span>Status</span>
+</div>
+
+
+{% for tx in data.transactions %}
+
+<div class="monitor-row">
+
+    <span>
+        {{ data.time }}
+    </span>
+
+
+    <strong>
+        {{ tx.merchant }}
+    </strong>
+
+
+    <span>
+        ₹{{ tx.amount }}
+    </span>
+
+
+    {% if tx.status == "Approved" %}
+
+    <em class="success">
+        Approved
+    </em>
+
+
+    {% elif tx.status == "Blocked" %}
+
+    <em class="danger">
+        Blocked
+    </em>
+
+
+    {% else %}
+
+    <em class="pending">
+        {{ tx.status }}
+    </em>
+
+
+    {% endif %}
+
+</div>
+
+
+{% endfor %}
+
+
+</section>
+<section class="monitor-charts">
+
+
+<div class="chart-card">
+
+<h3>💰 Spending Activity</h3>
+
+<canvas id="spendingChart"></canvas>
+
+</div>
+
+
+
+<div class="chart-card">
+
+<h3>🔄 Transaction Activity</h3>
+
+<canvas id="transactionChart"></canvas>
+
+</div>
+
+
+
+<div class="chart-card">
+
+<h3>🛡 Risk Monitoring</h3>
+
+<canvas id="riskChart"></canvas>
+
+</div>
+
+
+</section>
           <section class="monitor-stats">
-            <article>
-              <span>Spent Today</span>
-              <strong>₹12,340.00</strong>
-            </article>
-            <article>
-              <span>Remaining Today</span>
-              <strong>₹7,660.00</strong>
-            </article>
-            <article>
-              <span>Transactions</span>
-              <strong>7</strong>
-            </article>
-            <article>
-              <span>Risk Score</span>
-              <strong class="safe">28 (Low)</strong>
-            </article>
-          </section>
+
+<article>
+    <span>Spent Today</span>
+    <strong>
+        ₹{{ data.spent_today }}
+    </strong>
+</article>
+
+
+<article>
+    <span>Remaining Today</span>
+    <strong>
+        ₹{{ data.remaining }}
+    </strong>
+</article>
+
+
+<article>
+    <span>Transactions</span>
+    <strong>
+        {{ data.transaction_count }}
+    </strong>
+</article>
+
+
+<article>
+    <span>Risk Score</span>
+
+    {% if data.risk_level == "Low" %}
+
+    <strong class="safe">
+        {{ data.risk_score }} (Low)
+    </strong>
+
+
+    {% elif data.risk_level == "Medium" %}
+
+    <strong class="warning">
+        {{ data.risk_score }} (Medium)
+    </strong>
+
+
+    {% else %}
+
+    <strong class="danger">
+        {{ data.risk_score }} (High)
+    </strong>
+
+
+    {% endif %}
+
+</article>
+
+<article>
+
+    <span>
+        AI Agents
+    </span>
+
+    <strong>
+        {{ data.active_agents }}
+    </strong>
+
+    <small>
+        Active
+    </small>
+
+</article>
+
+
+
+<article>
+
+    <span>
+        Frozen Agents
+    </span>
+
+    <strong>
+        {{ data.frozen_agents }}
+    </strong>
+
+    <small>
+        Blocked
+    </small>
+
+</article>
+
+
+
+<article>
+
+    <span>
+        CPU Usage
+    </span>
+
+    <strong>
+        {{ data.cpu_usage }}%
+    </strong>
+
+    <small>
+        System Load
+    </small>
+
+</article>
+
+
+
+<article>
+
+    <span>
+        Network
+    </span>
+
+    <strong class="safe">
+        {{ data.network_status }}
+    </strong>
+
+    <small>
+        Connection
+    </small>
+
+</article>
+
+
+</section>
         </section>
       </main>
     </div>
-    <script src="{{ url_for('static', filename='script.js') }}">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="{{ url_for('static', filename='script.js') }}">
+</script>
   </body>
 </html>

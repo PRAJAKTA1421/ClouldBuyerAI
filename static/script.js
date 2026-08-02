@@ -248,3 +248,404 @@ function openPolicyModal() {
 function closePolicyModal() {
     document.getElementById("policyModal").style.display = "none";
 }
+
+// ================================
+// Phase 10 Step 6 - Live Charts
+// ================================
+
+
+const body = document.querySelector("body");
+
+
+if(body.dataset.amounts){
+
+
+    const amounts = JSON.parse(
+        body.dataset.amounts
+    );
+
+
+    const statuses = JSON.parse(
+        body.dataset.statuses
+    );
+
+
+    const riskPoints = JSON.parse(
+        body.dataset.risk
+    );
+
+
+
+    // -------------------------
+    // Spending Chart
+    // -------------------------
+
+    new Chart(
+        document.getElementById("spendingChart"),
+        {
+
+            type: "line",
+
+            data: {
+
+                labels: amounts.map(
+                    (_,i)=>"TX "+(i+1)
+                ),
+
+                datasets:[{
+
+                    label:"Amount Spent",
+
+                    data: amounts,
+
+                    borderWidth:2
+
+                }]
+
+            }
+
+        }
+
+    );
+
+
+
+    // -------------------------
+    // Transaction Activity Chart
+    // -------------------------
+
+    let approved = statuses.filter(
+        s=>s==="Approved"
+    ).length;
+
+
+    let blocked = statuses.filter(
+        s=>s==="Blocked"
+    ).length;
+
+
+    let pending = statuses.filter(
+        s=>s==="Pending Approval"
+    ).length;
+
+
+
+    new Chart(
+        document.getElementById("transactionChart"),
+        {
+
+            type:"bar",
+
+            data:{
+
+                labels:[
+                    "Approved",
+                    "Blocked",
+                    "Pending"
+                ],
+
+                datasets:[{
+
+                    label:"Transactions",
+
+                    data:[
+                        approved,
+                        blocked,
+                        pending
+                    ],
+
+                    borderWidth:1
+
+                }]
+
+            }
+
+        }
+
+    );
+
+
+
+    // -------------------------
+    // Risk Chart
+    // -------------------------
+
+    new Chart(
+        document.getElementById("riskChart"),
+        {
+
+            type:"line",
+
+            data:{
+
+                labels:riskPoints.map(
+                    (_,i)=>"Check "+(i+1)
+                ),
+
+                datasets:[{
+
+                    label:"Risk Score",
+
+                    data:riskPoints,
+
+                    borderWidth:2
+
+                }]
+
+            }
+
+        }
+
+    );
+
+
+}
+
+// =====================================
+// Phase 10 Step 7
+// Live Transaction Monitoring
+// =====================================
+
+
+function loadLiveTransactions(){
+
+
+fetch("/api/live-transactions")
+
+.then(response=>response.json())
+
+
+.then(data=>{
+
+
+let container =
+document.getElementById(
+"liveTransactions"
+);
+
+
+
+if(!container)
+return;
+
+
+
+container.innerHTML="";
+
+
+
+data.forEach(tx=>{
+
+
+let statusClass="pending";
+
+
+if(tx.status==="Approved")
+{
+statusClass="success";
+}
+
+
+else if(tx.status==="Blocked")
+{
+statusClass="danger";
+}
+
+
+
+container.innerHTML += `
+
+
+<div class="monitor-row">
+
+
+<span>
+${new Date().toLocaleTimeString()}
+</span>
+
+
+<strong>
+${tx.merchant}
+</strong>
+
+
+<span>
+₹${tx.amount}
+</span>
+
+
+<em class="${statusClass}">
+${tx.status}
+</em>
+
+
+</div>
+
+
+`;
+
+
+});
+
+
+});
+
+
+}
+
+
+
+// Initial load
+
+loadLiveTransactions();
+
+
+
+// Refresh every 3 seconds
+
+setInterval(
+loadLiveTransactions,
+3000
+);
+
+// ======================================
+// REPORT PAGE CHARTS
+// ======================================
+
+if (window.location.pathname === "/reports") {
+
+    const body = document.body;
+
+    const trend = JSON.parse(body.dataset.trend || "[]");
+
+    const categoryLabels = JSON.parse(body.dataset.categoryLabels || "[]");
+
+    const categoryValues = JSON.parse(body.dataset.categoryValues || "[]");
+
+
+    // ----------------------------
+    // Spending Trend
+    // ----------------------------
+
+    const trendCanvas = document.getElementById("spendingTrendChart");
+
+    if (trendCanvas) {
+
+        new Chart(trendCanvas, {
+
+            type: "line",
+
+            data: {
+
+                labels: trend.map((_, i) => "T" + (i + 1)),
+
+                datasets: [{
+
+                    label: "Spend",
+
+                    data: trend,
+
+                    borderWidth: 3,
+
+                    tension: 0.4,
+
+                    fill: true
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false
+
+            }
+
+        });
+
+    }
+
+
+    // ----------------------------
+    // Category Chart
+    // ----------------------------
+
+    const categoryCanvas = document.getElementById("categoryChart");
+
+    if (categoryCanvas) {
+
+        new Chart(categoryCanvas, {
+
+            type: "doughnut",
+
+            data: {
+
+                labels: categoryLabels,
+
+                datasets: [{
+
+                    data: categoryValues
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false
+
+            }
+
+        });
+
+    }
+
+}
+// ======================================
+// EXPORT REPORT PDF
+// ======================================
+
+const exportBtn = document.getElementById("exportPdfBtn");
+
+if (exportBtn) {
+
+    exportBtn.addEventListener("click", () => {
+
+        const trendCanvas = document.getElementById("spendingTrendChart");
+        const pieCanvas = document.getElementById("categoryChart");
+
+        if (!trendCanvas || !pieCanvas) {
+            alert("Charts not found!");
+            return;
+        }
+
+        const trendImage = trendCanvas.toDataURL("image/png");
+        const pieImage = pieCanvas.toDataURL("image/png");
+
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/export-pdf";
+
+        const trendInput = document.createElement("input");
+        trendInput.type = "hidden";
+        trendInput.name = "trend";
+        trendInput.value = trendImage;
+
+        const pieInput = document.createElement("input");
+        pieInput.type = "hidden";
+        pieInput.name = "pie";
+        pieInput.value = pieImage;
+
+        form.appendChild(trendInput);
+        form.appendChild(pieInput);
+
+        document.body.appendChild(form);
+        form.submit();
+
+    });
+
+}

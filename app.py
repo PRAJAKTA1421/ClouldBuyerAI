@@ -2,11 +2,17 @@ import json
 import os
 import random
 import secrets   # add this at the top of app.py
+
+import base64
+import tempfile
+
+from reportlab.platypus import Image
 from pathlib import Path
 from urllib.parse import urlencode
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
-
+from services.monitoring_service import get_monitoring_data
+from flask import jsonify
 from flask import (
     Flask,
     jsonify,
@@ -52,6 +58,21 @@ from services.policy_services import (
     update_policy_status,
     delete_policy
 )
+
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Table,
+    TableStyle,
+    Paragraph
+)
+
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import inch
+
+from flask import send_file
+
+import io
 app = Flask(__name__)
 
 
@@ -666,13 +687,413 @@ def delete_policy_route(policy_id):
 
 @app.route("/monitoring")
 def monitoring():
-    return render_template("monitoring.html")
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+
+    owner_uid = session["user"]["localId"]
+
+
+    transactions = get_all_transactions(owner_uid)
+
+
+    spent_today = 0
+
+    for tx in transactions:
+
+        spent_today += float(tx.get("amount",0))
+
+
+    total_limit = 20000   # temporary daily limit
+
+
+    remaining = total_limit - spent_today
+
+
+    transaction_count = len(transactions)
+
+
+
+    # simple risk calculation
+
+    risk_score = 0
+
+
+    for tx in transactions:
+
+        if tx.get("status") == "Blocked":
+            risk_score += 20
+
+        if tx.get("status") == "Pending Approval":
+            risk_score += 10
+
+
+    if risk_score < 30:
+        risk_level = "Low"
+
+    elif risk_score < 70:
+        risk_level = "Medium"
+
+    else:
+        risk_level = "High"
+
+
+
+        # ==============================
+    # AI AGENT MONITORING
+    # ==============================
+
+    agents = get_all_agents(owner_uid)
+
+    wallets = get_all_wallets(owner_uid)
+
+
+    active_agents = 0
+
+    frozen_agents = 0
+
+
+    for agent in agents:
+
+        if agent.get("status") == "Active":
+
+            active_agents += 1
+
+
+        elif agent.get("status") == "Frozen":
+
+            frozen_agents += 1
+
+
+
+    # Wallet activity
+
+    wallet_activity = len(wallets)
+
+
+
+    # System monitoring (temporary simulation)
+
+    cpu_usage = random.randint(20,75)
+
+
+    network_status = "Online"
+
+
+    # ==============================
+    # PHASE 10 STEP 6
+    # CHART DATA
+    # ==============================
+
+
+    amounts = []
+
+    statuses = []
+
+    risk_points = []
+
+
+    for tx in transactions:
+
+        amounts.append(
+            float(tx.get("amount",0))
+        )
+
+
+        statuses.append(
+            tx.get("status","Unknown")
+        )
+
+
+        if tx.get("status") == "Blocked":
+
+            risk_points.append(80)
+
+
+        elif tx.get("status") == "Pending Approval":
+
+            risk_points.append(50)
+
+
+        else:
+
+            risk_points.append(20)
+
+
+
+    data = {
+
+        "transactions": transactions,
+
+        "spent_today": spent_today,
+
+        "remaining": remaining,
+
+        "transaction_count": transaction_count,
+
+        "risk_score": risk_score,
+
+        "risk_level": risk_level,
+
+        "time": datetime.now().strftime("%H:%M:%S"),
+
+
+        # Phase 10 Step 5
+
+        "active_agents": active_agents,
+
+        "frozen_agents": frozen_agents,
+
+        "wallet_activity": wallet_activity,
+
+        "cpu_usage": cpu_usage,
+
+        "network_status": network_status,
+
+
+        # Phase 10 Step 6 Charts
+
+        "amounts": amounts,
+
+        "statuses": statuses,
+
+        "risk_points": risk_points
+
+    }
+
+
+    return render_template(
+        "monitoring.html",
+        data=data
+    )
+
+@app.route("/api/live-transactions")
+def live_transactions():
+
+    if "user" not in session:
+        return jsonify([])
+
+
+    owner_uid = session["user"]["localId"]
+
+
+    transactions = get_all_transactions(owner_uid)
+
+
+    return jsonify(transactions)
 
 
 @app.route("/reports")
 def reports():
-    return render_template("reports.html")
 
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    owner_uid = session["user"]["localId"]
+
+    transactions = get_all_transactions(owner_uid)
+
+    # -------------------------
+    # Report Statistics
+    # -------------------------
+
+    total_transactions = len(transactions)
+
+    successful = 0
+    blocked = 0
+    total_spend = 0
+
+    spending_trend = []
+
+    category_spending = {}
+
+    for tx in transactions:
+
+        amount = float(tx.get("amount", 0))
+        total_spend += amount
+
+        spending_trend.append(amount)
+
+        status = tx.get("status")
+
+        if status == "Approved":
+            successful += 1
+
+        elif status == "Blocked":
+            blocked += 1
+
+        category = tx.get("category", "Others")
+
+        if category not in category_spending:
+            category_spending[category] = 0
+
+        category_spending[category] += amount
+
+    report = {
+        "total_transactions": total_transactions,
+        "successful": successful,
+        "blocked": blocked,
+        "total_spend": total_spend,
+        "spending_trend": spending_trend,
+        "category_labels": list(category_spending.keys()),
+        "category_values": list(category_spending.values())
+    }
+
+    return render_template(
+        "reports.html",
+        report=report
+    )
+
+@app.route("/export-pdf", methods=["POST"])
+def export_pdf():
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    # ✅ ADD STEP 5 HERE
+    trend_image = request.form.get("trend")
+    pie_image = request.form.get("pie")
+
+    uid = session["user"]["localId"]
+
+    transactions = []
+
+    docs = db.collection("transactions")\
+             .where("owner_uid", "==", uid)\
+             .stream()
+
+    total_spend = 0
+    approved = 0
+    blocked = 0
+
+    for doc in docs:
+
+        tx = doc.to_dict()
+
+        transactions.append(tx)
+
+        total_spend += float(tx.get("amount", 0))
+
+        if tx.get("status") == "Approved":
+            approved += 1
+
+        if tx.get("status") == "Blocked":
+            blocked += 1
+
+    buffer = io.BytesIO()
+
+    pdf = SimpleDocTemplate(buffer)
+
+    styles = getSampleStyleSheet()
+
+    elements = []
+
+    elements.append(
+        Paragraph("<b>Kill Switch Security Report</b>", styles["Title"])
+    )
+
+    elements.append(
+        Paragraph(f"Total Transactions : {len(transactions)}", styles["Normal"])
+    )
+
+    elements.append(
+        Paragraph(f"Approved : {approved}", styles["Normal"])
+    )
+
+    elements.append(
+        Paragraph(f"Blocked : {blocked}", styles["Normal"])
+    )
+
+    elements.append(
+        Paragraph(f"Total Spend : ₹{total_spend:.2f}", styles["Normal"])
+    )
+
+    elements.append(Paragraph("<br/>", styles["Normal"]))
+
+    data = [
+        ["Merchant", "Amount", "Status"]
+    ]
+
+    for tx in transactions:
+
+        data.append([
+            tx.get("merchant", "-"),
+            f"₹{tx.get('amount',0)}",
+            tx.get("status", "-")
+        ])
+
+    table = Table(data)
+
+    table.setStyle(TableStyle([
+
+        ("BACKGROUND",(0,0),(-1,0),colors.HexColor("#4F46E5")),
+
+        ("TEXTCOLOR",(0,0),(-1,0),colors.white),
+
+        ("GRID",(0,0),(-1,-1),1,colors.grey),
+
+        ("BACKGROUND",(0,1),(-1,-1),colors.beige),
+
+        ("BOTTOMPADDING",(0,0),(-1,0),12),
+
+    ]))
+
+    elements.append(table)
+
+    # =====================================
+    # STEP 7 - Add Trend Chart to PDF
+    # =====================================
+
+    if trend_image:
+
+        trend_data = trend_image.split(",")[1]
+
+        trend_bytes = base64.b64decode(trend_data)
+
+        trend_file = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
+
+        trend_file.write(trend_bytes)
+
+        trend_file.close()
+
+        elements.append(Paragraph("<br/><b>Spending Trend</b>", styles["Heading2"]))
+
+        elements.append(Image(trend_file.name, width=6*inch, height=3*inch))
+
+
+    # =====================================
+    # STEP 8 - Add Pie Chart to PDF
+    # =====================================
+
+    if pie_image:
+
+        pie_data = pie_image.split(",")[1]
+
+        pie_bytes = base64.b64decode(pie_data)
+
+        pie_file = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
+
+        pie_file.write(pie_bytes)
+
+        pie_file.close()
+
+        elements.append(Paragraph("<br/><b>Category Distribution</b>", styles["Heading2"]))
+
+        elements.append(Image(pie_file.name, width=5*inch, height=5*inch))
+
+
+    # Build PDF
+    pdf.build(elements)
+
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name="KillSwitch_Report.pdf",
+        mimetype="application/pdf"
+    )
 
 @app.route("/alerts")
 def alerts():

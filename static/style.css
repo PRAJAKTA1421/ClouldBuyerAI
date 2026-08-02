@@ -2498,3 +2498,18 @@ margin-bottom:12px;
     color:#ff6b6b;
     border:1px solid #ff4d4f;
 }
+
+.trend-chart canvas{
+
+width:100%;
+height:250px;
+
+}
+
+.report-chart-container{
+
+    height:320px;
+
+    position:relative;
+
+}
