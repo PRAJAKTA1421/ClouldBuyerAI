@@ -1,12 +1,16 @@
 from firebase.firebase_config import db
 
 
-def get_dashboard_stats():
+def get_dashboard_stats(owner_uid):
 
     # ----------------------------
     # Agents
     # ----------------------------
-    agents = list(db.collection("agents").stream())
+    agents = list(
+        db.collection("agents")
+        .where("owner_uid", "==", owner_uid)
+        .stream()
+    )
 
     total_agents = len(agents)
 
@@ -21,7 +25,11 @@ def get_dashboard_stats():
     # ----------------------------
     # Wallet Balance
     # ----------------------------
-    wallets = list(db.collection("wallets").stream())
+    wallets = list(
+        db.collection("wallets")
+          .where("owner_uid", "==", owner_uid)
+          .stream()
+    )
 
     wallet_balance = 0
 
@@ -35,7 +43,9 @@ def get_dashboard_stats():
     # Transactions
     # ----------------------------
     transactions = list(
-        db.collection("transactions").stream()
+       db.collection("transactions")
+          .where("owner_uid", "==", owner_uid)
+         .stream()
     )
 
     today_spend = 0

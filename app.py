@@ -182,12 +182,16 @@ def dashboard():
     if "user" not in session:
         return redirect(url_for("login"))
 
-    stats = get_dashboard_stats()
+    stats = get_dashboard_stats(
+        session["user"]["localId"]
+    )
 
     user = {
         "username": session["user"]["email"].split("@")[0],
         "role": "Owner"
     }
+
+    print(session["user"])
 
     return render_template(
          "dashboard.html",
