@@ -146,3 +146,73 @@ document.querySelectorAll('.google-button').forEach((button) => {
 document.querySelectorAll('.or-divider').forEach((divider) => {
   divider.textContent = 'Continue with Google';
 });
+/* ==========================
+   TASK MODAL
+========================== */
+
+function openTaskModal(){
+
+    const modal = document.getElementById("taskModal");
+
+    if(modal){
+        modal.style.display = "flex";
+    }
+
+}
+
+function closeTaskModal(){
+
+    const modal = document.getElementById("taskModal");
+
+    if(modal){
+        modal.style.display = "none";
+    }
+
+}
+
+/* Close when clicking outside */
+
+window.onclick = function(event){
+
+    const modal = document.getElementById("taskModal");
+
+    if(modal && event.target === modal){
+
+        closeTaskModal();
+
+    }
+
+};
+
+/* Close on ESC */
+
+document.addEventListener("keydown", function(e){
+
+    if(e.key === "Escape"){
+
+        closeTaskModal();
+
+    }
+
+});
+
+/* Auto hide flash messages */
+
+setTimeout(function(){
+
+    const flashes = document.querySelectorAll(".flash-message");
+
+    flashes.forEach(function(msg){
+
+        msg.style.transition = "0.5s";
+        msg.style.opacity = "0";
+
+        setTimeout(function(){
+
+            msg.remove();
+
+        },500);
+
+    });
+
+},3000);

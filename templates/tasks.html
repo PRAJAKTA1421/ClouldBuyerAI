@@ -29,27 +29,27 @@
             <i>□</i>
             Tasks
           </a>
-          <a href="#">
+          <a href="/wallets">
             <i>▣</i>
             Wallets
           </a>
-          <a href="#">
+          <a href="/transactions">
             <i>⇄</i>
             Transactions
           </a>
-          <a href="#">
+          <a href="/security-policies">
             <i>⌾</i>
             Security Policies
           </a>
-          <a href="#">
+          <a href="monitoring">
             <i>◌</i>
             Monitoring
           </a>
-          <a href="#">
+          <a href="/alerts">
             <i>♧</i>
             Alerts
           </a>
-          <a href="#">
+          <a href="/reports">
             <i>▤</i>
             Reports
           </a>
@@ -83,6 +83,7 @@
         <section class="task-list-content">
           <div class="task-page-title">
             <div>
+
               <p class="eyebrow">
                 <span>
                 </span>
@@ -91,20 +92,202 @@
               <h1>Assign a task</h1>
               <p>Select one of your AI agents and give it a protected mission.</p>
             </div>
-            <a href="/agents" class="new-agent-link">+ Create AI Agent</a>
+            <button
+    class="new-agent-link"
+    type="button"
+    onclick="openTaskModal()">
+
+    + Create Task
+
+</button>
           </div>
-          <div class="agent-task-grid" data-agent-task-grid>
-          </div>
-          <div class="empty-agents" data-empty-agents>
-            <span>✦</span>
-            <h2>No AI agents yet</h2>
-            <p>Create an AI agent first, then you can assign it secure tasks.</p>
-            <a class="button primary" href="/agents">
-              Create AI Agent
-              <span>→</span>
-            </a>
-          </div>
+          {% with messages = get_flashed_messages() %}
+
+{% if messages %}
+
+<div class="flash-container">
+
+    {% for message in messages %}
+
+    <div class="flash-message">
+
+        {{ message }}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+{% endwith %}
+          <div class="task-grid">
+
+{% for task in tasks %}
+
+<div class="task-card">
+
+    <div class="task-header">
+
+        <h3>{{ task.title }}</h3>
+
+        <span class="status">
+
+            {{ task.status }}
+
+        </span>
+
+    </div>
+
+    <p>{{ task.description }}</p>
+
+    <hr>
+
+    <p>
+
+        <strong>Agent:</strong>
+
+        {{ task.agent_name }}
+
+    </p>
+
+    <p>
+
+        <strong>Wallet:</strong>
+
+        {{ task.wallet_name }}
+
+    </p>
+
+    <p>
+
+        <strong>Priority:</strong>
+
+        {{ task.priority }}
+
+    </p>
+
+</div>
+
+{% endfor %}
+
+</div>
+          {% if not tasks %}
+
+<div class="empty-agents">
+
+    <span>✦</span>
+
+    <h2>No Tasks Yet</h2>
+
+    <p>
+
+        Create your first AI task.
+
+    </p>
+
+    <button
+        class="button primary"
+        onclick="openTaskModal()">
+
+        Create Task
+
+    </button>
+
+</div>
+
+{% endif %}
         </section>
+        <div id="taskModal" class="task-modal">
+
+    <div class="task-modal-content">
+
+        <div class="modal-header">
+
+            <h2>Create New Task</h2>
+
+            <button
+                onclick="closeTaskModal()">
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <form
+            action="/create-task"
+            method="POST">
+
+            <input
+                type="text"
+                name="title"
+                placeholder="Task Title"
+                required>
+
+            <textarea
+                name="description"
+                placeholder="Task Description"
+                required></textarea>
+
+            <select
+                name="agent"
+                required>
+
+                <option value="">
+
+                    Select Agent
+
+                </option>
+
+                {% for agent in agents %}
+
+                <option value="{{ agent.id }}">
+
+                    {{ agent.name }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+            <select
+                name="priority">
+
+                <option>
+
+                    Low
+
+                </option>
+
+                <option selected>
+
+                    Medium
+
+                </option>
+
+                <option>
+
+                    High
+
+                </option>
+
+            </select>
+
+            <button
+                type="submit">
+
+                Create Task
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
       </main>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}">

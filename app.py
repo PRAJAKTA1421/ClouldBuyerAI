@@ -33,6 +33,12 @@ from services.wallet_service import (
     delete_wallet,
     update_wallet_status
 )
+from services.task_service import (
+    create_task,
+    get_all_tasks,
+    delete_task,
+    update_task_status
+)
 app = Flask(__name__)
 
 
@@ -226,8 +232,73 @@ def activate_agent(agent_id):
 
 @app.route("/tasks")
 def tasks():
-    return render_template("tasks.html")
 
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    tasks = get_all_tasks(
+        session["user"]["localId"]
+    )
+
+    agents = get_all_agents(
+        session["user"]["localId"]
+    )
+
+    return render_template(
+        "tasks.html",
+        tasks=tasks,
+        agents=agents
+    )
+
+@app.route("/create-task", methods=["POST"])
+def create_task_route():
+
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    agent_id = request.form.get("agent")
+
+    agents = get_all_agents(
+        session["user"]["localId"]
+    )
+
+    selected_agent = None
+
+    for agent in agents:
+
+        if agent["id"] == agent_id:
+            selected_agent = agent
+            break
+
+    if selected_agent is None:
+
+        flash("Invalid agent selected.")
+
+        return redirect(url_for("tasks"))
+
+    data = {
+
+        "title": request.form.get("title"),
+
+        "description": request.form.get("description"),
+
+        "priority": request.form.get("priority"),
+
+        "agent_id": selected_agent["id"],
+
+        "agent_name": selected_agent["name"],
+
+        "wallet_name": selected_agent["wallet_name"],
+
+        "owner_uid": session["user"]["localId"]
+
+    }
+
+    create_task(data)
+
+    flash("Task created successfully!")
+
+    return redirect(url_for("tasks"))
 
 @app.route("/assign-task")
 def assign_task():
@@ -387,4 +458,3 @@ def logout():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
